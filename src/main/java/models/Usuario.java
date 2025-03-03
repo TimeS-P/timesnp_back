@@ -38,13 +38,13 @@ public class Usuario {
     @Column(name = "rol", nullable = false, length = 100)
     private Rol rol;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "usuario")
     private VerificarCorreo verificarCorreo;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario")
     private List<Domicilio> domicilios;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
     public Usuario() {}

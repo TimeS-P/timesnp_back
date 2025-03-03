@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,12 +25,12 @@ public class Combo {
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
 
-    @OneToOne(mappedBy = "combo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "combo")
     private ServicioGeneral servicioGeneral;
 
     public Combo() {

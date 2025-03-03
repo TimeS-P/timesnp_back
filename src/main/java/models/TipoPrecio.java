@@ -23,7 +23,7 @@ public class TipoPrecio {
     @Column(name = "nombre", nullable = true, length = 100)
     private String unidad_medida;
 
-    @OneToMany(mappedBy = "tipoPrecio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tipoPrecio")
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     public TipoPrecio() {

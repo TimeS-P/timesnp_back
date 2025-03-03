@@ -30,7 +30,7 @@ public class CategoriaServicio {
     @Column(name = "icono", nullable = true, length = 300)
     private String icono;
 
-    @OneToMany(mappedBy = "categoriaServicio" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "categoriaServicio")
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     public CategoriaServicio() {

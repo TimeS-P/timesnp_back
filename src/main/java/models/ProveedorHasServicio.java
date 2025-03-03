@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,22 +28,22 @@ public class ProveedorHasServicio {
     @Column(name = "calificacion", nullable = true, columnDefinition = "int default 0")
     private int calificacion;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_tipo_precio", nullable = false)
     private TipoPrecio tipoPrecio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_categoria_servicio", nullable = false)
     private CategoriaServicio categoriaServicio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
 
-    @OneToOne(mappedBy = "proveedorHasServicio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "proveedorHasServicio")
     private ServicioGeneral servicioGeneral;
 
     public ProveedorHasServicio() {
