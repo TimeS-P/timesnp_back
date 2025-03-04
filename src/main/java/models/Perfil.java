@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -56,6 +58,18 @@ public class Perfil {
 
     @OneToOne(mappedBy = "perfil")
     private Proveedor proveedor;
+
+    @OneToMany(mappedBy = "perfil")
+    private List<Contratacion> contrataciones;
+
+    @OneToMany(mappedBy = "perfil")
+    private List<Reporte> reportes;
+
+    @OneToMany(mappedBy = "emisor")
+    private List<Mensaje> mensajesReceptor;
+
+    @OneToMany(mappedBy = "remitente")
+    private List<Mensaje> mensajesEmisor;
 
     public Perfil() {
     }

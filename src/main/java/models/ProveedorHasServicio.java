@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
@@ -14,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -45,6 +47,9 @@ public class ProveedorHasServicio {
 
     @OneToOne(mappedBy = "proveedorHasServicio")
     private ServicioGeneral servicioGeneral;
+
+    @OneToMany(mappedBy = "proveedorHasServicio")
+    private List<DiasLibres> diasLibres;
 
     public ProveedorHasServicio() {
     }

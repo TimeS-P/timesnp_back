@@ -40,6 +40,12 @@ public class Proveedor {
     @OneToMany(mappedBy = "proveedor")
     private List<Combo> combos;
 
+    @OneToMany(mappedBy = "proveedor")
+    private List<SolicitudCombo> solicitudCombos;
+
+    @OneToMany(mappedBy = "proveedor")
+    private List<ComboHasProveedor> comboHasProveedores;
+
     public Proveedor() {
     }
 

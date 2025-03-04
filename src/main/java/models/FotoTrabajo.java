@@ -1,51 +1,41 @@
 package models;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-@Entity(name = "combo")
-@Table(name = "combo")
-public class Combo {
+@Entity(name = "foto_trabajo")
+@Table(name = "foto_trabajo")
+public class FotoTrabajo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private UUID id;
 
+    @Column(name = "url_foto", nullable = true)
+    private String url_foto;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_proveedor", nullable = false)
-    private Proveedor proveedor;
-
-    @OneToOne(mappedBy = "combo")
+    @Column(name = "id_servicio_general", nullable = false)
     private ServicioGeneral servicioGeneral;
 
-    @OneToMany(mappedBy = "combo")
-    private List<SolicitudCombo> solicitudCombos;
-
-    @OneToOne(mappedBy = "combo")
-    private Combo combo;
-
-    public Combo() {
+    public FotoTrabajo() {
     }
 
-    public Combo(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    public FotoTrabajo(String url_foto, ServicioGeneral servicioGeneral) {
+        this.url_foto = url_foto;
+        this.servicioGeneral = servicioGeneral;
     }
 
     public UUID getId() {
@@ -56,11 +46,20 @@ public class Combo {
         this.id = id;
     }
 
-    public Proveedor getProveedor() {
-        return proveedor;
+    public String getUrl_foto() {
+        return url_foto;
     }
 
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    public void setUrl_foto(String url_foto) {
+        this.url_foto = url_foto;
     }
+
+    public ServicioGeneral getServicioGeneral() {
+        return servicioGeneral;
+    }
+
+    public void setServicioGeneral(ServicioGeneral servicioGeneral) {
+        this.servicioGeneral = servicioGeneral;
+    }
+
 }

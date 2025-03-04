@@ -1,12 +1,10 @@
 package models;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,13 +13,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-@Entity(name = "combo")
-@Table(name = "combo")
-public class Combo {
+@Entity(name = "combo_has_proveedor")
+@Table(name = "combo_has_proveedor")
+public class ComboHasProveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -29,23 +26,20 @@ public class Combo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_proveedor", nullable = false)
+    @JoinColumn(name = "id_proveedor", nullable = true)
     private Proveedor proveedor;
-
-    @OneToOne(mappedBy = "combo")
-    private ServicioGeneral servicioGeneral;
-
-    @OneToMany(mappedBy = "combo")
-    private List<SolicitudCombo> solicitudCombos;
-
-    @OneToOne(mappedBy = "combo")
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_combo", nullable = true)
     private Combo combo;
 
-    public Combo() {
+    public ComboHasProveedor(Proveedor proveedor, Combo combo) {
+        this.proveedor = proveedor;
+        this.combo = combo;
     }
 
-    public Combo(Proveedor proveedor) {
-        this.proveedor = proveedor;
+    public ComboHasProveedor() {
     }
 
     public UUID getId() {
@@ -63,4 +57,13 @@ public class Combo {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+
+    public Combo getCombo() {
+        return combo;
+    }
+
+    public void setCombo(Combo combo) {
+        this.combo = combo;
+    }
+    
 }

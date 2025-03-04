@@ -1,5 +1,7 @@
 package models;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
@@ -14,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -33,7 +36,7 @@ public class ServicioGeneral {
     private String descripcion;
 
     @Column(name = "precio", nullable = true)
-    private Double precio;
+    private BigDecimal precio;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_servicio", nullable = false, length = 20)
@@ -41,7 +44,7 @@ public class ServicioGeneral {
 
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_proveedor_has_servicio", nullable = false)
+    @JoinColumn(name = "id_proveedor_has_servicio", nullable = true)
     private ProveedorHasServicio proveedorHasServicio;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -49,10 +52,22 @@ public class ServicioGeneral {
     @JoinColumn(name = "id_combo", nullable = true)
     private Combo combo;
 
+    @OneToMany(mappedBy = "servicioGeneral")
+    private List<Contratacion> contrataciones;
+
+    @OneToMany(mappedBy = "servicioGeneral")
+    private List<FotoTrabajo> fotos;
+
+    @OneToMany(mappedBy = "servicioGeneral")
+    private List<Reporte> reportes;
+
+    @OneToMany(mappedBy = "servicioGeneral")
+    private List<Mensaje> calificaciones;
+
     public ServicioGeneral() {
     }
 
-    public ServicioGeneral(String nombre, String descripcion, Double precio, TipoServicio tipoServicio, ProveedorHasServicio proveedorHasServicio, Combo combo) {
+    public ServicioGeneral(String nombre, String descripcion, BigDecimal precio, TipoServicio tipoServicio, ProveedorHasServicio proveedorHasServicio, Combo combo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -85,11 +100,11 @@ public class ServicioGeneral {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

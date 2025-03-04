@@ -47,6 +47,9 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
+    @OneToOne(mappedBy = "usuario")
+    private RecuperarPassword recuperarPassword;
+
     public Usuario() {}
 
     public Usuario(String correo, String password, Rol rol) {
