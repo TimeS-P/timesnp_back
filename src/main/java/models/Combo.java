@@ -39,7 +39,7 @@ public class Combo {
     private List<SolicitudCombo> solicitudCombos;
 
     @OneToOne(mappedBy = "combo")
-    private Combo combo;
+    private ComboHasProveedor comboHasProveedor;
 
     public Combo() {
     }

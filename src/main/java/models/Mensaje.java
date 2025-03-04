@@ -13,6 +13,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -33,17 +34,16 @@ public class Mensaje {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "id_emisor", nullable = true)
+    @JoinColumn(name = "id_emisor", nullable = true)
     private Perfil emisor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "id_receptor", nullable = true)
-    private Perfil remitente;
+    @JoinColumn Perfil remitente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "id_servicio_general", nullable = true)
+    @JoinColumn(name = "id_servicio_general", nullable = true)
     private ServicioGeneral servicioGeneral;
 
     @PrePersist

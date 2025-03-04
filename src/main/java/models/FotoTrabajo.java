@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -27,7 +28,7 @@ public class FotoTrabajo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name = "id_servicio_general", nullable = false)
+    @JoinColumn(name = "id_servicio_general", nullable = false)
     private ServicioGeneral servicioGeneral;
 
     public FotoTrabajo() {

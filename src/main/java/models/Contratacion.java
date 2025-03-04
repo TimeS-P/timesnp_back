@@ -14,6 +14,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -40,12 +41,12 @@ public class Contratacion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @Column(name = "id_perfil", nullable = true)
+    @JoinColumn(name = "id_perfil", nullable = true)
     private Perfil perfil;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @Column(name = "id_servicio_general", nullable = true)
+    @JoinColumn(name = "id_servicio_general", nullable = true)
     private ServicioGeneral servicioGeneral;
 
     @OneToMany(mappedBy = "contratacion")
