@@ -3,6 +3,7 @@ package models;
 import java.sql.Date;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,9 +20,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "verificar_correo")
 @Table(name = "verificar_correo")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class VerificarCorreo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -36,35 +42,8 @@ public class VerificarCorreo {
     @Column(name="token", nullable = false, length = 300)
     private String token;
 
-    public VerificarCorreo() {
-    }
-
     public VerificarCorreo(Usuario usuario, String token) {
         this.usuario = usuario;
-        this.token = token;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
         this.token = token;
     }
 }

@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -21,9 +22,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "contratacion")
 @Table(name = "contratacion")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Contratacion {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -52,9 +58,6 @@ public class Contratacion {
     @OneToMany(mappedBy = "contratacion")
     private List<Resena> resenas;
 
-    public Contratacion() {
-    }
-
     public Contratacion(Date fechaInicio, Date fechaFin, BigDecimal total, int cantidad, Perfil perfil,
             ServicioGeneral servicioGeneral) {
         this.fechaInicio = fechaInicio;
@@ -64,62 +67,5 @@ public class Contratacion {
         this.perfil = perfil;
         this.servicioGeneral = servicioGeneral;
     }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
-
-    public ServicioGeneral getServicioGeneral() {
-        return servicioGeneral;
-    }
-
-    public void setServicioGeneral(ServicioGeneral servicioGeneral) {
-        this.servicioGeneral = servicioGeneral;
-    }
-    
 
 }

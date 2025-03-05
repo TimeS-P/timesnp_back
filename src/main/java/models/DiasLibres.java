@@ -2,6 +2,7 @@ package models;
 
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,9 +20,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "dias_libres")
 @Table(name = "dias_libres")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class DiasLibres {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -38,34 +44,5 @@ public class DiasLibres {
         this.dia = dia;
         this.proveedorHasServicio = proveedorHasServicio;
     }
-
-    public DiasLibres() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Dias getDia() {
-        return dia;
-    }
-
-    public void setDia(Dias dia) {
-        this.dia = dia;
-    }
-
-    public ProveedorHasServicio getProveedorHasServicio() {
-        return proveedorHasServicio;
-    }
-
-    public void setProveedorHasServicio(ProveedorHasServicio proveedorHasServicio) {
-        this.proveedorHasServicio = proveedorHasServicio;
-    }
-
-    
 
 }

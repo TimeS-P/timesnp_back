@@ -3,6 +3,7 @@ package models;
 import java.sql.Date;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,9 +19,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "verificacion")
 @Table(name = "verificacion")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Verificacion {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -35,44 +41,9 @@ public class Verificacion {
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
 
-    public Verificacion() {
-    }
-
     public Verificacion(String url_foto_credencial, Date fecha_verificacion, Perfil perfil) {
         this.url_foto_credencial = url_foto_credencial;
         this.fecha_verificacion = fecha_verificacion;
-        this.perfil = perfil;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getUrl_foto_credencial() {
-        return url_foto_credencial;
-    }
-
-    public void setUrl_foto_credencial(String url_foto_credencial) {
-        this.url_foto_credencial = url_foto_credencial;
-    }
-
-    public Date getFecha_verificacion() {
-        return fecha_verificacion;
-    }
-
-    public void setFecha_verificacion(Date fecha_verificacion) {
-        this.fecha_verificacion = fecha_verificacion;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
 }

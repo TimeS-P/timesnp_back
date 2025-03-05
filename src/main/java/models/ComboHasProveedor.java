@@ -2,6 +2,7 @@ package models;
 
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,9 +19,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "combo_has_proveedor")
 @Table(name = "combo_has_proveedor")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ComboHasProveedor {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -36,33 +42,6 @@ public class ComboHasProveedor {
 
     public ComboHasProveedor(Proveedor proveedor, Combo combo) {
         this.proveedor = proveedor;
-        this.combo = combo;
-    }
-
-    public ComboHasProveedor() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Proveedor getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
-    }
-
-    public Combo getCombo() {
-        return combo;
-    }
-
-    public void setCombo(Combo combo) {
         this.combo = combo;
     }
     

@@ -2,6 +2,7 @@ package models;
 
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,10 +18,15 @@ import jakarta.persistence.Table;
 
 @Entity(name = "resena")
 @Table(name = "resena")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Resena {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -38,41 +44,6 @@ public class Resena {
     public Resena(int calificacion, String comentario, Contratacion contratacion) {
         this.calificacion = calificacion;
         this.comentario = comentario;
-        this.contratacion = contratacion;
-    }
-
-    public Resena() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public int getCalificacion() {
-        return calificacion;
-    }
-
-    public void setCalificacion(int calificacion) {
-        this.calificacion = calificacion;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public Contratacion getContratacion() {
-        return contratacion;
-    }
-
-    public void setContratacion(Contratacion contratacion) {
         this.contratacion = contratacion;
     }
     

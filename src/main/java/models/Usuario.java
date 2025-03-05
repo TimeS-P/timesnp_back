@@ -1,42 +1,43 @@
 package models;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.IdGeneratorType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import dtos.RegisterUserDto;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "usuario")
 @Table(name = "usuario")
-public class Usuario {
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
     
-    @Column(name = "correo", nullable = true, length = 100, unique = true)
-    private String correo;
+    @Column(name = "email", nullable = true, length = 100, unique = true)
+    private String email;
 
     @Column(name = "password", nullable = true, length = 100)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false, length = 100)
-    private Rol rol;
+    // Columna para manejar el rol o los roles del usuario
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private Set<Rol> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
     private VerificarCorreo verificarCorreo;
@@ -50,51 +51,53 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private RecuperarPassword recuperarPassword;
 
-    public Usuario() {}
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true;
 
-    public Usuario(String correo, String password, Rol rol) {
-        this.correo = correo;
+    @Column(name = "accountNonExpired", nullable = false)
+    private boolean accountNonExpired = true;
+
+    @Column(name = "accountNonLocked", nullable = false)
+    private boolean accountNonLocked = true;
+
+    @Column(name = "credentialsNonExpired", nullable = false)
+    private boolean credentialsNonExpired = true;
+
+
+    public Usuario(String email, String password,  Set<Rol> roles) {
+        this.email = email;
         this.password = password;
-        this.rol = rol;
+        this.roles = roles;
     }
 
-    public UUID getId() {
-        return id;
+    /**
+     * @return Collection of authorities
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(rolElement -> new SimpleGrantedAuthority(rolElement.toString()))
+                .collect(Collectors.toList());
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
+    /**
+     * @return String for the password
+     */
+    @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    /**
+     * @return String for the
+     */
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public VerificarCorreo getVerificarCorreo() {
-        return verificarCorreo;
-    }
-
-    public void setVerificarCorreo(VerificarCorreo verificarCorreo) {
-        this.verificarCorreo = verificarCorreo;
+    // DTO Mapper
+    public static Usuario from(RegisterUserDto registerUserDto) {
+        return new Usuario(registerUserDto.getEmail(), registerUserDto.getPassword(), registerUserDto.getRoles());
     }
 }

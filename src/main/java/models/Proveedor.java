@@ -3,6 +3,7 @@ package models;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,9 +21,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "proveedor")
 @Table(name = "proveedor")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Proveedor {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -46,35 +52,9 @@ public class Proveedor {
     @OneToMany(mappedBy = "proveedor")
     private List<ComboHasProveedor> comboHasProveedores;
 
-    public Proveedor() {
-    }
-
     public Proveedor(String rfc, Perfil perfil) {
         this.rfc = rfc;
         this.perfil = perfil;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
 }

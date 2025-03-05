@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,10 +23,15 @@ import jakarta.persistence.Table;
 
 @Entity(name = "servicio_general")
 @Table(name = "servicio_general")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@AllArgsConstructor
 public class ServicioGeneral {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -64,9 +70,6 @@ public class ServicioGeneral {
     @OneToMany(mappedBy = "servicioGeneral")
     private List<Mensaje> calificaciones;
 
-    public ServicioGeneral() {
-    }
-
     public ServicioGeneral(String nombre, String descripcion, BigDecimal precio, TipoServicio tipoServicio, ProveedorHasServicio proveedorHasServicio, Combo combo) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -76,59 +79,4 @@ public class ServicioGeneral {
         this.combo = combo;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
-    public TipoServicio getTipoServicio() {
-        return tipoServicio;
-    }
-
-    public void setTipoServicio(TipoServicio tipoServicio) {
-        this.tipoServicio = tipoServicio;
-    }
-
-    public ProveedorHasServicio getProveedorHasServicio() {
-        return proveedorHasServicio;
-    }
-
-    public void setProveedorHasServicio(ProveedorHasServicio proveedorHasServicio) {
-        this.proveedorHasServicio = proveedorHasServicio;
-    }
-
-    public Combo getCombo() {
-        return combo;
-    }
-
-    public void setCombo(Combo combo) {
-        this.combo = combo;
-    }
 }

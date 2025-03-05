@@ -12,12 +12,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.*;
 
 @Entity(name = "RecuperarPassword")
 @Table(name = "RecuperarPassword")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class RecuperarPassword {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -31,44 +37,9 @@ public class RecuperarPassword {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    public RecuperarPassword() {
-    }
-
     public RecuperarPassword(String token, Date expires, Usuario usuario) {
         this.token = token;
         this.expires = expires;
-        this.usuario = usuario;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Date getExpires() {
-        return expires;
-    }
-
-    public void setExpires(Date expires) {
-        this.expires = expires;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 }

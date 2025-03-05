@@ -11,12 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.*;
 
 @Entity(name = "tipo_precio")
 @Table(name = "tipo_precio")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class TipoPrecio {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -26,27 +32,9 @@ public class TipoPrecio {
     @OneToMany(mappedBy = "tipoPrecio")
     private List<ProveedorHasServicio> proveedorHasServicios;
 
-    public TipoPrecio() {
-    }
-
     public TipoPrecio(String unidad_medida) {
         this.unidad_medida = unidad_medida;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getUnidadMedida() {
-        return unidad_medida;
-    }
-
-    public void setUnidadMedida(String unidad_medida) {
-        this.unidad_medida = unidad_medida;
-    }
 
 }

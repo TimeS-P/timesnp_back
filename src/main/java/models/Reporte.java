@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,9 +21,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "reporte")
 @Table(name = "reporte")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reporte {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -47,53 +53,10 @@ public class Reporte {
         this.fecha = Date.valueOf(LocalDate.now());
     }
 
-    public Reporte() {
-    }
-
     public Reporte(String comentario, Date fecha, Perfil perfil, ServicioGeneral servicioGeneral) {
         this.comentario = comentario;
         this.fecha = fecha;
         this.perfil = perfil;
-        this.servicioGeneral = servicioGeneral;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
-
-    public ServicioGeneral getServicioGeneral() {
-        return servicioGeneral;
-    }
-
-    public void setServicioGeneral(ServicioGeneral servicioGeneral) {
         this.servicioGeneral = servicioGeneral;
     }
     

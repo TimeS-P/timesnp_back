@@ -3,6 +3,7 @@ package models;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -21,9 +22,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "proveedor_has_servicio")
 @Table(name = "proveedor_has_servicio")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProveedorHasServicio {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -51,8 +57,6 @@ public class ProveedorHasServicio {
     @OneToMany(mappedBy = "proveedorHasServicio")
     private List<DiasLibres> diasLibres;
 
-    public ProveedorHasServicio() {
-    }
 
     public ProveedorHasServicio(int calificacion, TipoPrecio tipoPrecio, CategoriaServicio categoriaServicio, Proveedor proveedor) {
         this.calificacion = calificacion;
@@ -61,43 +65,4 @@ public class ProveedorHasServicio {
         this.proveedor = proveedor;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public int getCalificacion() {
-        return calificacion;
-    }
-
-    public void setCalificacion(int calificacion) {
-        this.calificacion = calificacion;
-    }
-
-    public TipoPrecio getTipoPrecio() {
-        return tipoPrecio;
-    }
-
-    public void setTipoPrecio(TipoPrecio tipoPrecio) {
-        this.tipoPrecio = tipoPrecio;
-    }
-
-    public CategoriaServicio getCategoriaServicio() {
-        return categoriaServicio;
-    }
-
-    public void setCategoriaServicio(CategoriaServicio categoriaServicio) {
-        this.categoriaServicio = categoriaServicio;
-    }
-
-    public Proveedor getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(Proveedor proveedor) {
-        this.proveedor = proveedor;
-    }
 }

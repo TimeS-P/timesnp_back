@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,9 +21,14 @@ import jakarta.persistence.Table;
 
 @Entity(name = "mensaje")
 @Table(name = "mensaje")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Mensaje {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
@@ -59,55 +65,4 @@ public class Mensaje {
 		this.servicioGeneral = servicioGeneral;
 	}
 
-	public Mensaje() {
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-
-	public String getMensaje() {
-		return mensaje;
-	}
-
-	public void setMensaje(String mensaje) {
-		this.mensaje = mensaje;
-	}
-
-	public Date getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-
-	public Perfil getEmisor() {
-		return emisor;
-	}
-
-	public void setEmisor(Perfil emisor) {
-		this.emisor = emisor;
-	}
-
-	public Perfil getRemitente() {
-		return remitente;
-	}
-
-	public void setRemitente(Perfil remitente) {
-		this.remitente = remitente;
-	}
-
-	public ServicioGeneral getServicioGeneral() {
-		return servicioGeneral;
-	}
-
-	public void setServicioGeneral(ServicioGeneral servicioGeneral) {
-		this.servicioGeneral = servicioGeneral;
-	}
-    
 }
