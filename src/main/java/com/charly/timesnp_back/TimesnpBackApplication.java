@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.charly.timesnp_back", "models"})
-@EnableJpaRepositories(basePackages = {"com.charly.timesnp_back", "models"})
-@EntityScan(basePackages = {"com.charly.timesnp_back", "models"})
+//@ComponentScan(basePackages = {"com.charly.timesnp_back", "models", "org.springframework.security"})
+//@EnableJpaRepositories(basePackages = {"com.charly.timesnp_back", "models"})
+//@EntityScan(basePackages = {"com.charly.timesnp_back", "com/charly/timesnp_back/models"})
 public class TimesnpBackApplication {
 
     public static void main(String[] args) {
