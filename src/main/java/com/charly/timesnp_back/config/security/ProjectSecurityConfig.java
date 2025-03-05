@@ -1,5 +1,6 @@
-package com.charly.timesnp_back.config;
+package com.charly.timesnp_back.config.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +14,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class ProjectSecurityConfig {
+
+    // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
+    private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
 
     /**
      * This method is in charge of creating the security filter chain
@@ -33,14 +38,14 @@ public class ProjectSecurityConfig {
                         "/api/testing"
                 ).authenticated()
                 .requestMatchers(
-                        "/api/users/**",
+                        "/api/auth/**",
                         "/api/contact",
                         "/error"
                 ).permitAll()
         );
 
         // Configuramos la autenticacion basica
-        http.httpBasic(withDefaults());
+        http.httpBasic(basic -> basic.authenticationEntryPoint(timeSnpAuthenticationEntryPoint));
 
         return http.build();
     }

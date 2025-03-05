@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 // Anotación para el manejo de logs, para que cree un logger llamado "log" en la clase
 @Slf4j
