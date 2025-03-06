@@ -14,6 +14,7 @@ import com.charly.timesnp_back.services.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+//Implementación del servicio de envío de correos
 @Service
 public class EmailServiceImpl implements IEmailService {
 

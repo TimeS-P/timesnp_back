@@ -7,6 +7,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+//Configuración para el funcionamiento de Thymeleaf
 @Configuration
 public class ThymeleafConfig {
 

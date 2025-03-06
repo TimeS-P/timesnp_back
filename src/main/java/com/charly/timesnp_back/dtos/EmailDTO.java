@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+//DTO para el envío de correos, recibe Destinatario, Asunto, Mensaje, Título y Nombre
 @Getter
 @Setter
 @ToString

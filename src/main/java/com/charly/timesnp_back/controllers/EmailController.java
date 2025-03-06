@@ -10,7 +10,7 @@ import com.charly.timesnp_back.services.IEmailService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+//Controlador para el envío de correos
 @RestController
 @RequestMapping
 public class EmailController {
@@ -19,12 +19,12 @@ public class EmailController {
     IEmailService emailService;
 
     @PostMapping("/api/send-email")
-    private ResponseEntity<String> sendEmail(@RequestBody EmailDTO emailDTO){
+    private ResponseEntity<ApiResponseTemplate<String>> sendEmail(@RequestBody EmailDTO emailDTO){
         try {
             emailService.sendEmail(emailDTO);
-            return ResponseEntity.ok("Email enviado correctamente");
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Email enviado correctamente", null));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al enviar el correo: "+e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error al enviar el correo: " + e.getMessage()));
         }
     }
     
