@@ -44,4 +44,21 @@ public class EmailServiceImpl implements IEmailService {
             throw new MessagingException("Error al enviar el correo: "+e.getMessage());
         }
     }
+
+    @Override
+    public void sendForgotPassword(String email, String link) throws MessagingException {
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Cambiar contraseña");
+            Context context = new Context();
+            context.setVariable("link", link);
+            String htmlContent = templateEngine.process("forgot_password", context);
+            helper.setText(htmlContent, true);
+            javaMailSender.send(message);
+        }catch (MessagingException e){
+            throw new MessagingException("Error al enviar el correo: "+e.getMessage());
+        }
+    }
 }
