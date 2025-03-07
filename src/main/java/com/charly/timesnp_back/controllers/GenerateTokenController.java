@@ -37,8 +37,8 @@ public class GenerateTokenController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"+": "+email));
 
         String token = UUID.randomUUID().toString();
-        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(30); // Expira en 30 minutos
-        Date expiration = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()); // Expira en 30 minutos
+        LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(5); // Expira en 5 minutos
+        Date expiration = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()); // Expira en 5 minutos
 
         String link = "http://localhost:5173/forgot_password?token=" + token;
 
