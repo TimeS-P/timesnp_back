@@ -35,7 +35,6 @@ public class UserController {
     public ResponseEntity<ApiResponseTemplate<Usuario>> registerUser(@RequestBody RegisterUserDto registerUserDto) {
 
         try {
-
             // Hasheamos el password
             String hashPwd = this.passwordEncoder.encode(registerUserDto.getPassword());
             registerUserDto.setPassword(hashPwd);

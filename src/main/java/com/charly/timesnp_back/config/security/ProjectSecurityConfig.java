@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -40,6 +42,9 @@ public class ProjectSecurityConfig {
                 .requestMatchers(
                         "/api/auth/**",
                         "/api/contact",
+                        "/api/forgot_password",
+                        "/api/validate_token",
+                        "/api/cambiar_contrasena",
                         "/api/send-email", //En teoría tenemos que proteger esta ruta, sin embargo el usuario no está logueado para este punto, por lo que habrá que resolverlo
                         "/error"
                 ).permitAll()

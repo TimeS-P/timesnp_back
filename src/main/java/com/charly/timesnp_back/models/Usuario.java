@@ -96,6 +96,10 @@ public class Usuario implements UserDetails {
         return this.email;
     }
 
+    /**
+     * @return id_user by email
+     */
+
     // DTO Mapper
     public static Usuario from(RegisterUserDto registerUserDto, Set<Rol> roles) {
 
