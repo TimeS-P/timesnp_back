@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.models;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -31,13 +32,13 @@ public class RecuperarPassword {
     private String token;
 
     @Column(name = "expires", nullable = true)
-    private Date expires;
+    private LocalDateTime expires;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    public RecuperarPassword(String token, Date expires, Usuario usuario) {
+    public RecuperarPassword(String token, LocalDateTime expires, Usuario usuario) {
         this.token = token;
         this.expires = expires;
         this.usuario = usuario;

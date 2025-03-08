@@ -51,11 +51,14 @@ public class EmailServiceImpl implements IEmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(email);
-            helper.setSubject("Cambiar contraseña");
+            helper.setSubject("Restablecimiento de la contraseña de TimeS&P");
             Context context = new Context();
             context.setVariable("link", link);
+            context.setVariable("email", email);
             String htmlContent = templateEngine.process("forgot_password", context);
             helper.setText(htmlContent, true);
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
+            helper.addInline("logo", logo);
             javaMailSender.send(message);
         }catch (MessagingException e){
             throw new MessagingException("Error al enviar el correo: "+e.getMessage());
