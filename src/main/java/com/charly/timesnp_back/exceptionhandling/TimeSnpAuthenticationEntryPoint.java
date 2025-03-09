@@ -1,4 +1,4 @@
-package com.charly.timesnp_back.config.security;
+package com.charly.timesnp_back.exceptionhandling;
 
 import com.charly.timesnp_back.controllers.ApiResponseTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,12 +30,16 @@ public class TimeSnpAuthenticationEntryPoint implements AuthenticationEntryPoint
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
+        String message = (authException != null && authException.getMessage() != null) ? authException.getMessage() : "Authentication failed.";
+
         // Loguea el error completo
-        logger.error("Unauthorized error: {}", authException.getMessage());
+        logger.error("Authentication failed error: {}", authException != null ? authException.getMessage() : "Authentication failed in Authentication Entry Point.");
 
         // Prepara la respuesta personalizada
         ApiResponseTemplate<Object> apiResponse = ApiResponseTemplate.error("Credenciales inválidas.");
 
+        response.setHeader("timesnp-error-reason", "Authentication failed.");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(objectMapper.writeValueAsString(apiResponse));

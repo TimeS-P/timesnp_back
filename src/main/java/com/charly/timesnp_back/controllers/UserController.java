@@ -4,6 +4,7 @@ import com.charly.timesnp_back.dtos.RegisterUserDto;
 import com.charly.timesnp_back.models.Rol;
 import com.charly.timesnp_back.models.RolNombre;
 import com.charly.timesnp_back.repositories.RolRepository;
+import com.charly.timesnp_back.services.implementations.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import com.charly.timesnp_back.models.Usuario;
 import lombok.extern.slf4j.Slf4j;
@@ -27,35 +28,14 @@ import java.util.Set;
 public class UserController {
 
     // Inyecta repositorio de usuarios y password encoder por constructor
-    private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RolRepository rolRepository;
+    private final UserServiceImpl userService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseTemplate<Usuario>> registerUser(@RequestBody RegisterUserDto registerUserDto) {
 
         try {
-            // Hasheamos el password
-            String hashPwd = this.passwordEncoder.encode(registerUserDto.getPassword());
-            registerUserDto.setPassword(hashPwd);
 
-            // Verificamos si el email ya existe
-            if (this.usuarioRepository.existsByEmail(registerUserDto.getEmail())) {
-                // Retornamos una mala respuesta
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseTemplate.error("El correo ya esta registrado"));
-            }
-
-            // Convertir los roles del DTO a instancias persistidas
-            Set<Rol> roles = new HashSet<>();
-            for (RolNombre rolNombre : registerUserDto.getRoles()) {
-                Rol rolPersistido = rolRepository.findByNombre(rolNombre)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found: " + rolNombre));
-                roles.add(rolPersistido);
-            }
-
-
-            // Mapeamos el DTO a la entidad
-            Usuario newUser = this.usuarioRepository.save(Usuario.from(registerUserDto, roles));
+            Usuario newUser = this.userService.registerUser(registerUserDto);
 
             if (newUser.getId() != null) {
                 // Retornamos una buena respuesta
