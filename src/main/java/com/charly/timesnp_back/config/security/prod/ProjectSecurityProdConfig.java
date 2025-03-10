@@ -1,4 +1,4 @@
-package com.charly.timesnp_back.config.security;
+package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
@@ -16,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@Profile("!prod")
+@Profile("prod")
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class ProjectSecurityConfig {
+public class ProjectSecurityProdConfig {
 
     // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
@@ -33,9 +33,11 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(10))
-                .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())// ONLY HTTP
+
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(1))
+                .requiresChannel(rcc -> rcc.anyRequest().requiresSecure())// ONLY HTTPS
                 .csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
+
 
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests

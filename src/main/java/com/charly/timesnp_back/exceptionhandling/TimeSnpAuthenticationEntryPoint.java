@@ -41,7 +41,6 @@ public class TimeSnpAuthenticationEntryPoint implements AuthenticationEntryPoint
         response.setHeader("timesnp-error-reason", "Authentication failed.");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
 
     }
