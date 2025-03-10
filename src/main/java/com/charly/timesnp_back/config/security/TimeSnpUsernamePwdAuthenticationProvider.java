@@ -33,6 +33,7 @@ public class TimeSnpUsernamePwdAuthenticationProvider implements AuthenticationP
         // Obtiene el usuario de la base de datos
         UserDetails userDetails = timeSnpUserDetailsService.loadUserByUsername(username);
 
+        // En modo desarrollo, se omite la comparación de contraseñas para facilitar el desarrollo
         // Compara las contraseñas
         //if (passwordEncoder.matches(pwd, userDetails.getPassword())) {
             // Si las contraseñas coinciden, se crea un nuevo token de autenticación con el usuario autenticado

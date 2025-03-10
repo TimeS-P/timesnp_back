@@ -2,6 +2,7 @@ package com.charly.timesnp_back.config.security;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -33,7 +38,25 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(10))
+        http.cors(corsConfig -> corsConfig.configurationSource(
+                        new CorsConfigurationSource() {
+                            @Override
+                            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                                CorsConfiguration config = new CorsConfiguration();
+                                // Origins permitidos (React vite dev server)
+                                config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                                // Permitir todos los métodos (GET, POST, PUT, DELETE, etc)
+                                config.setAllowedMethods(Collections.singletonList("*"));
+                                // Accepting credentials (cookies, authorization,etc)
+                                config.setAllowCredentials(true);
+                                // Permitir todos los headers
+                                config.setAllowedHeaders(Collections.singletonList("*"));
+                                config.setMaxAge(3600L); // 1 hora
+                                return config;
+                            }
+                        }
+                ))
+                .sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(10))
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())// ONLY HTTP
                 .csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 

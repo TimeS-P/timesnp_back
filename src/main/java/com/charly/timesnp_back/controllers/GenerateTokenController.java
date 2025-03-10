@@ -29,7 +29,7 @@ public class GenerateTokenController {
     @Autowired
     ForgotPasswordService forgotPasswordService;
 
-    @CrossOrigin(origins = "http://localhost:5173")
+//    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/api/forgot_password")
     public ResponseEntity<ApiResponseTemplate<String>> generateToken(@RequestBody Map<String, String> requestBody) throws MessagingException {
         try {

@@ -14,7 +14,7 @@ public class CambiarContrasenaController {
     @Autowired
     ForgotPasswordService forgotPasswordService;
 
-    @CrossOrigin(origins = "http://localhost:5173")
+//    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/api/cambiar_contrasena")
     public ResponseEntity<ApiResponseTemplate<String>> cambiarContrasena(@RequestBody CambiarContrasenaDTO cambiarContrasenaDTO) throws MessagingException {
         String token = cambiarContrasenaDTO.getToken();
