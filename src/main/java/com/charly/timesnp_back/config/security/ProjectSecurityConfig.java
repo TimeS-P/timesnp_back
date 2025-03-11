@@ -2,6 +2,7 @@ package com.charly.timesnp_back.config.security;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
+import com.charly.timesnp_back.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +11,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -38,7 +43,13 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.cors(corsConfig -> corsConfig.configurationSource(
+        // Para manejar el token CSRF que se manda en la request (El token que se manda en la Cookie se maneja automáticamente)
+        CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
+
+        // No guardar los detalles de autenticación en el SecurityContextHolder
+        http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
+                .sessionManagement(sesionConfig -> sesionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .cors(corsConfig -> corsConfig.configurationSource(
                         new CorsConfigurationSource() {
                             @Override
                             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -56,16 +67,22 @@ public class ProjectSecurityConfig {
                             }
                         }
                 ))
-                .sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession").maximumSessions(10))
-                .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())// ONLY HTTP
-                .csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
+                .csrf(
+                        csrfConfig -> csrfConfig
+                                .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
+                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
+                )
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
+                .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// ONLY HTTP
+                //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
-                        "/api/testing"
+                        "/api/testing/private"
                 ).authenticated()
                 .requestMatchers(
+                        "/api/testing/public",
                         "/api/auth/**",
                         "/api/contact",
                         "/api/forgot_password",
