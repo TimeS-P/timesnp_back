@@ -70,6 +70,10 @@ public class ProjectSecurityConfig {
                 .csrf(
                         csrfConfig -> csrfConfig
                                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
+                                .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
+                                        "/api/auth/register",
+                                        "/api/auth/login"
+                                )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
@@ -79,22 +83,22 @@ public class ProjectSecurityConfig {
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(
-                        "/api/testing/private"
+                        "/api/testing/private",
+                        "/api/cambiar_contrasena",
+                        "/api/forgot_password",
+                        "/api/validate_token"
                 ).authenticated()
                 .requestMatchers(
                         "/api/testing/public",
                         "/api/auth/**",
                         "/api/contact",
-                        "/api/forgot_password",
-                        "/api/validate_token",
-                        "/api/cambiar_contrasena",
                         "/api/send-email", //En teoría tenemos que proteger esta ruta, sin embargo el usuario no está logueado para este punto, por lo que habrá que resolverlo
                         "/error",
                         "/invalidSession"
                 ).permitAll()
         );
 
-        http.formLogin(withDefaults());
+        //http.formLogin(withDefaults());
         // Configuramos la autenticacion basica
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(timeSnpAuthenticationEntryPoint));
         // GLOGAL CONFIGURATION FOR EXCEPTION HANDLING
