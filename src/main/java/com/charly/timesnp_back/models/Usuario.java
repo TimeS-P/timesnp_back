@@ -84,7 +84,7 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
-                .map(rolElement -> new SimpleGrantedAuthority(rolElement.toString()))
+                .map(rolElement -> new SimpleGrantedAuthority(rolElement.getNombre().toString()))
                 .collect(Collectors.toList());
     }
 

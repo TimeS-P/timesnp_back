@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestingController {
 
 
-    @GetMapping("/private")
+    @GetMapping("/private/admin")
     public String getTesting() {
-        return "Here is the testing with authentication";
+        return "Here is the testing with authentication and admin";
+    }
+
+    @GetMapping("/private")
+    public String getTestingNoAdmin() {
+        return "Here is the testing with authentication but not admin";
     }
 
     @GetMapping("/public")

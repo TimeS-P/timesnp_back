@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Slf4j // For logging object inyection
 public class AuthenticationEvents {
 
+    // Unicamente se ejecuta al hacer el primer login, despues que ya se setean las cookies y el token
+    // ya no se manda llamar
     @EventListener
     public void onSuccess(AuthenticationSuccessEvent successEvent) {
         // En caso de que querramos hacer auditoria para seguridad y manejo de usuarios y llevar controlados los accesos

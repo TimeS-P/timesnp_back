@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.config.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("!prod")
 @RequiredArgsConstructor
+@Slf4j
 public class TimeSnpUsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
     // Inyecta el bean del servicio de detalles de usuario
@@ -26,6 +28,7 @@ public class TimeSnpUsernamePwdAuthenticationProvider implements AuthenticationP
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.info("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         // Obtiene el nombre de usuario y la contraseña del token de autenticación
         String username = authentication.getName();
         String pwd = authentication.getCredentials().toString();

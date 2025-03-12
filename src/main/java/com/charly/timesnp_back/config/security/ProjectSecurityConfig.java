@@ -2,6 +2,7 @@ package com.charly.timesnp_back.config.security;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
+import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
 import com.charly.timesnp_back.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +78,7 @@ public class ProjectSecurityConfig {
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
+                .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// ONLY HTTP
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
@@ -88,6 +90,9 @@ public class ProjectSecurityConfig {
                         "/api/forgot_password",
                         "/api/validate_token"
                 ).authenticated()
+                .requestMatchers(
+                        "/api/testing/private/admin"
+                ).hasRole("ADMIN")
                 .requestMatchers(
                         "/api/testing/public",
                         "/api/auth/**",
