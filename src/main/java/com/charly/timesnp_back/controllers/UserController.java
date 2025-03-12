@@ -10,11 +10,9 @@ import com.charly.timesnp_back.models.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.charly.timesnp_back.repositories.UsuarioRepository;
 
 import java.util.HashSet;
@@ -56,6 +54,36 @@ public class UserController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponseTemplate.error("Ocurrio un error al registrar al usuario"));
         }
+    }
+
+    // Login endpoint
+    @GetMapping("/login")
+    public ResponseEntity<ApiResponseTemplate<Usuario>> loginUser(Authentication authentication) {
+
+        try {
+
+            Usuario user = this.userService.getUserByEmail(authentication.getName());
+
+            if (user != null) {
+                // Retornamos una buena respuesta
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(ApiResponseTemplate.ok("Usuario logueado exitosamente", user));
+            } else {
+                // Retornamos una mala respuesta
+                return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ApiResponseTemplate.error("Ocurrio un error al loguear al usuario"));
+            }
+
+        } catch (Exception e) {
+            log.error("Error al loguear usuario", e);
+            // Retornamos una mala respuesta
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Ocurrio un error al loguear al usuario"));
+        }
+
     }
 
 }

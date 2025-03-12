@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -71,5 +72,11 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
 
+    }
+
+    public Usuario getUserByEmail(String email) {
+        Optional<Usuario> user = this.usuarioRepository.findByEmail(email);
+
+        return user.orElse(null);
     }
 }
