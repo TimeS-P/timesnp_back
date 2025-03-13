@@ -1,4 +1,4 @@
-package com.charly.timesnp_back.config.security;
+package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
@@ -30,10 +30,10 @@ import java.util.Collections;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@Profile("!prod")
+@Profile("prod")
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class ProjectSecurityConfig {
+public class ProjectSecurityProdConfig {
 
     // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
@@ -58,7 +58,7 @@ public class ProjectSecurityConfig {
                             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                                 CorsConfiguration config = new CorsConfiguration();
                                 // Origins permitidos (React vite dev server)
-                                config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                                config.setAllowedOrigins(Collections.singletonList("https://timesnp.com"));
                                 // Permitir todos los métodos (GET, POST, PUT, DELETE, etc)
                                 config.setAllowedMethods(Collections.singletonList("*"));
                                 // Accepting credentials (cookies, authorization,etc)
@@ -84,8 +84,9 @@ public class ProjectSecurityConfig {
                 .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
                 .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
-                .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// ONLY HTTP
+                .requiresChannel(rcc -> rcc.anyRequest().requiresSecure());// ONLY HTTPS
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
+
 
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests

@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.charly.timesnp_back.dtos.RegisterUserDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +30,7 @@ public class Usuario implements UserDetails {
     private String email;
 
     @Column(name = "password", nullable = true, length = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // No mostrar la contraseña en las respuestas
     private String password;
 
     // Columna para manejar el rol o los roles del usuario
@@ -37,6 +40,7 @@ public class Usuario implements UserDetails {
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
+    @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
@@ -63,6 +67,11 @@ public class Usuario implements UserDetails {
     @Column(name = "credentialsNonExpired", nullable = false)
     private boolean credentialsNonExpired = true;
 
+    // Fecha de creación del usuario (timestamp)
+//    @Column(name = "created_at", nullable = false)
+//    @JsonIgnore
+//    private Date createdAt = new Date();
+
 
     public Usuario(String email, String password,  Set<Rol> roles) {
         this.email = email;
@@ -74,9 +83,10 @@ public class Usuario implements UserDetails {
      * @return Collection of authorities
      */
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
-                .map(rolElement -> new SimpleGrantedAuthority(rolElement.toString()))
+                .map(rolElement -> new SimpleGrantedAuthority(rolElement.getNombre().toString()))
                 .collect(Collectors.toList());
     }
 

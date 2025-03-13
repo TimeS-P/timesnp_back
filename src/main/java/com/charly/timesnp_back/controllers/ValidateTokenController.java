@@ -18,7 +18,7 @@ public class ValidateTokenController {
     @Autowired
     ForgotPasswordService forgotPasswordService;
 
-    @CrossOrigin(origins = "http://localhost:5173")
+//    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/api/validate_token")
     public ResponseEntity<ApiResponseTemplate<String>> validateToken(@RequestBody Map<String, String> requestBody) throws MessagingException {
         String token = requestBody.get("token");
