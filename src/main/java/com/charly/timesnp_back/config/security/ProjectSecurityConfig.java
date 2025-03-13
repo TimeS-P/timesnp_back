@@ -76,8 +76,7 @@ public class ProjectSecurityConfig {
                         csrfConfig -> csrfConfig
                                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                                 .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
-                                        "/api/auth/register",
-                                        "/api/auth/login"
+                                        "/api/auth/register"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )

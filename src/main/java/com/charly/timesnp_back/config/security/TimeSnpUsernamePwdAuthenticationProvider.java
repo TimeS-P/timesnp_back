@@ -1,5 +1,6 @@
 package com.charly.timesnp_back.config.security;
 
+import com.charly.timesnp_back.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -28,7 +29,7 @@ public class TimeSnpUsernamePwdAuthenticationProvider implements AuthenticationP
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        //log.info("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         // Obtiene el nombre de usuario y la contraseña del token de autenticación
         String username = authentication.getName();
         String pwd = authentication.getCredentials().toString();
@@ -40,7 +41,8 @@ public class TimeSnpUsernamePwdAuthenticationProvider implements AuthenticationP
         // Compara las contraseñas
         //if (passwordEncoder.matches(pwd, userDetails.getPassword())) {
             // Si las contraseñas coinciden, se crea un nuevo token de autenticación con el usuario autenticado
-            return new UsernamePasswordAuthenticationToken(username, pwd, userDetails.getAuthorities());
+            Usuario usuario = (Usuario)userDetails;
+            return new UsernamePasswordAuthenticationToken(usuario, pwd, userDetails.getAuthorities());
         //} else {
             // Si las contraseñas no coinciden, se lanza una excepción de autenticación
         //    throw new BadCredentialsException("Invalid password.");

@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.filter;
 
 import com.charly.timesnp_back.constants.ApplicationConstants;
+import com.charly.timesnp_back.models.Usuario;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -33,6 +34,9 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Obtenemos el usuario autenticado
+        Usuario user = (Usuario) authentication.getPrincipal();
+
         if (authentication != null) {
             // Obtenemos el secret key de las variables de entorno
             Environment env = getEnvironment(); // Metodo de GenericFilterBean
@@ -52,6 +56,8 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                                         .map(GrantedAuthority::getAuthority)
                                         .collect(Collectors.joining(","))
                         ) // Claim de authorities (Roles) del usuario separados por coma
+                        //Claim para agregar si la cuenta esta bloqueada o no
+                        .claim("accountNonLocked", user.isAccountNonLocked())
                         .issuedAt(new Date()) // Fecha de emisión
                         // Expiration time de 8 horas
                         .expiration(new Date(new Date().getTime() + 1000 * 60 * 60 * 8))

@@ -2,7 +2,10 @@ package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
+import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
 import com.charly.timesnp_back.filter.CsrfCookieFilter;
+import com.charly.timesnp_back.filter.JWTTokenGeneratorFilter;
+import com.charly.timesnp_back.filter.JWTTokenValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +24,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -46,9 +50,8 @@ public class ProjectSecurityProdConfig {
         // Para manejar el token CSRF que se manda en la request (El token que se manda en la Cookie se maneja automáticamente)
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
 
-        // No guardar los detalles de autenticación en el SecurityContextHolder
-        http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
-                .sessionManagement(sesionConfig -> sesionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        // No guardar la sesión en el servidor (El token jwt no se guarda en el servidor, solo lo enviaremos al cliente)
+        http.sessionManagement(sesionConfig -> sesionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(corsConfig -> corsConfig.configurationSource(
                         new CorsConfigurationSource() {
                             @Override
@@ -62,6 +65,8 @@ public class ProjectSecurityProdConfig {
                                 config.setAllowCredentials(true);
                                 // Permitir todos los headers
                                 config.setAllowedHeaders(Collections.singletonList("*"));
+                                // Exponer el header Authorization para enviar el token JWT
+                                config.setExposedHeaders(Arrays.asList("Authorization"));
                                 config.setMaxAge(3600L); // 1 hora
                                 return config;
                             }
@@ -71,12 +76,14 @@ public class ProjectSecurityProdConfig {
                         csrfConfig -> csrfConfig
                                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                                 .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
-                                        "/api/auth/register",
-                                        "/api/auth/login"
+                                        "/api/auth/register"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
+                .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
+                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
+                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure());// ONLY HTTPS
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
@@ -89,6 +96,9 @@ public class ProjectSecurityProdConfig {
                         "/api/forgot_password",
                         "/api/validate_token"
                 ).authenticated()
+                .requestMatchers(
+                        "/api/testing/private/admin"
+                ).hasRole("ADMIN")
                 .requestMatchers(
                         "/api/testing/public",
                         "/api/auth/**",

@@ -40,6 +40,7 @@ public class Usuario implements UserDetails {
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
+    @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
@@ -82,6 +83,7 @@ public class Usuario implements UserDetails {
      * @return Collection of authorities
      */
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
                 .map(rolElement -> new SimpleGrantedAuthority(rolElement.getNombre().toString()))
