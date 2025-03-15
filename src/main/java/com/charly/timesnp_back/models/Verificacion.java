@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,11 +35,12 @@ public class Verificacion {
     @Column(name = "url_foto_credencial", nullable = true, length = 300)
     private String url_foto_credencial;
 
-    @Column(name = "url_foto_perfil", nullable = true, length = 300)
+    @Column(name = "fecha_verificacion", nullable = true, length = 300)
     private Date fecha_verificacion;
 
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
 

@@ -94,7 +94,8 @@ public class ProjectSecurityProdConfig {
                         "/api/testing/private",
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
-                        "/api/validate_token"
+                        "/api/validate_token",
+                        "/api/updateUserInfo"
                 ).authenticated()
                 .requestMatchers(
                         "/api/testing/private/admin"
