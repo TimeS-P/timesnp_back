@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
         // Responder con un mensaje amigable y no exponer el stack trace
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponseTemplate.error("Uno o más valores de rol no son válidos."));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponseTemplate<String>> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
+        // Puedes definir el código de estado HTTP y un mensaje amigable
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(ApiResponseTemplate.error("El tamaño del archivo excede el máximo permitidod de 10MB."));
     }
 
 
