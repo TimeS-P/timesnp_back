@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.config.security.TimeSnpUserDetailsService;
+import com.charly.timesnp_back.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -37,7 +38,8 @@ public class TimeSnpProdUsernamePwdAuthenticationProvider implements Authenticat
         // Compara las contraseñas
         if (passwordEncoder.matches(pwd, userDetails.getPassword())) {
             // Si las contraseñas coinciden, se crea un nuevo token de autenticación con el usuario autenticado
-            return new UsernamePasswordAuthenticationToken(username, pwd, userDetails.getAuthorities());
+            Usuario usuario = (Usuario)userDetails;
+            return new UsernamePasswordAuthenticationToken(usuario, pwd, userDetails.getAuthorities());
         } else {
             // Si las contraseñas no coinciden, se lanza una excepción de autenticación
             throw new BadCredentialsException("Invalid password.");
