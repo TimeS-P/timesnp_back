@@ -49,6 +49,7 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario")
     private List<Domicilio> domicilios;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
