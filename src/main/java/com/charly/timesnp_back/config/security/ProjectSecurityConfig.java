@@ -89,13 +89,14 @@ public class ProjectSecurityConfig {
 
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers(
+                .requestMatchers( // Rutas que requieren autenticación
                         "/api/testing/private",
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
-                        "/api/validate_token"
+                        "/api/validate_token",
+                        "/api/resources/**"
                 ).authenticated()
-                .requestMatchers(
+                .requestMatchers( // Rutas que requieren el rol de ADMIN
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
                 .requestMatchers(
