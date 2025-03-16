@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.services;
 
 import com.charly.timesnp_back.dtos.EmailDTO;
+import com.charly.timesnp_back.dtos.VerificationDeniedDTO;
 
 import jakarta.mail.MessagingException;
 
@@ -8,4 +9,6 @@ import jakarta.mail.MessagingException;
 public interface IEmailService  {
     public void sendEmail(EmailDTO emailDTO) throws MessagingException;
     public void sendForgotPassword(String email, String link) throws  MessagingException;
+    public void sendVerificationConfirmation(String email, String nombre) throws MessagingException;
+    public void sendVerificationDenied(VerificationDeniedDTO verificationDeniedDTO) throws MessagingException;
 }

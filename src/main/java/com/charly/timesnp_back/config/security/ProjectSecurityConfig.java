@@ -95,9 +95,14 @@ public class ProjectSecurityConfig {
                         "/api/forgot_password",
                         "/api/validate_token",
                         "/api/updateUserInfo"
+                        
                 ).authenticated()
                 .requestMatchers(
-                        "/api/testing/private/admin"
+                        "/api/send-accept-verification",
+                        "/api/send-denied-verification"
+                ).hasRole("VERIFICADOR")
+                .requestMatchers(
+                        "/api/testing/private/admin"    
                 ).hasRole("ADMIN")
                 .requestMatchers(
                         "/api/testing/public",
