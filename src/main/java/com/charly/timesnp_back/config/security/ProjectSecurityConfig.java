@@ -89,11 +89,12 @@ public class ProjectSecurityConfig {
 
         // Configuramos las rutas que requieren autenticación
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers(
+                .requestMatchers( // Rutas que requieren autenticación
                         "/api/testing/private",
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
                         "/api/validate_token",
+                        "/api/resources/**",
                         "/api/updateUserInfo"
                         
                 ).authenticated()
@@ -102,7 +103,7 @@ public class ProjectSecurityConfig {
                         "/api/send-denied-verification"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers(
-                        "/api/testing/private/admin"    
+                        "/api/testing/private/admin"
                 ).hasRole("ADMIN")
                 .requestMatchers(
                         "/api/testing/public",
