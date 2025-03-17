@@ -94,7 +94,8 @@ public class ProjectSecurityConfig {
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
                         "/api/validate_token",
-                        "/api/resources/**"
+                        "/api/resources/**",
+                        "/api/updateUserInfo"
                 ).authenticated()
                 .requestMatchers( // Rutas que requieren el rol de ADMIN
                         "/api/testing/private/admin"
