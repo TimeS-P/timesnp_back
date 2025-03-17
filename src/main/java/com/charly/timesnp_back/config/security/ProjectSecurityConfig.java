@@ -96,8 +96,13 @@ public class ProjectSecurityConfig {
                         "/api/validate_token",
                         "/api/resources/**",
                         "/api/updateUserInfo"
+                        
                 ).authenticated()
-                .requestMatchers( // Rutas que requieren el rol de ADMIN
+                .requestMatchers(
+                        "/api/send-accept-verification",
+                        "/api/send-denied-verification"
+                ).hasRole("VERIFICADOR")
+                .requestMatchers(
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
                 .requestMatchers(
