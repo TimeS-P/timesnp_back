@@ -9,6 +9,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.charly.timesnp_back.dtos.EmailDTO;
+import com.charly.timesnp_back.dtos.VerificationDeniedDTO;
 import com.charly.timesnp_back.services.IEmailService;
 
 import jakarta.mail.MessagingException;
@@ -56,6 +57,45 @@ public class EmailServiceImpl implements IEmailService {
             context.setVariable("link", link);
             context.setVariable("email", email);
             String htmlContent = templateEngine.process("forgot_password", context);
+            helper.setText(htmlContent, true);
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
+            helper.addInline("logo", logo);
+            javaMailSender.send(message);
+        }catch (MessagingException e){
+            throw new MessagingException("Error al enviar el correo: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendVerificationConfirmation(String email, String nombre) throws MessagingException {
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject("Confirmación de verificación en TimeS&P");
+            Context context = new Context();
+            context.setVariable("name", nombre);
+            String htmlContent = templateEngine.process("aceptarVerificacion", context);
+            helper.setText(htmlContent, true);
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
+            helper.addInline("logo", logo);
+            javaMailSender.send(message);
+        }catch (MessagingException e){
+            throw new MessagingException("Error al enviar el correo: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendVerificationDenied(VerificationDeniedDTO verificationDeniedDTO) throws MessagingException {
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(verificationDeniedDTO.getEmail());
+            helper.setSubject("Denegación de verificación en TimeS&P");
+            Context context = new Context();
+            context.setVariable("name", verificationDeniedDTO.getName());
+            context.setVariable("message", verificationDeniedDTO.getMessage());
+            String htmlContent = templateEngine.process("denegarVerificacion", context);
             helper.setText(htmlContent, true);
             ClassPathResource logo = new ClassPathResource("static/logo.png");
             helper.addInline("logo", logo);
