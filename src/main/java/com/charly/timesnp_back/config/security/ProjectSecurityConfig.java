@@ -96,7 +96,6 @@ public class ProjectSecurityConfig {
                         "/api/validate_token",
                         "/api/resources/**",
                         "/api/updateUserInfo"
-                        
                 ).authenticated()
                 .requestMatchers(
                         "/api/send-accept-verification",

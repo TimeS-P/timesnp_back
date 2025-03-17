@@ -95,6 +95,7 @@ public class ProjectSecurityProdConfig {
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
                         "/api/validate_token",
+                        "/api/resources/**",
                         "/api/updateUserInfo"
                 ).authenticated()
                 .requestMatchers(
