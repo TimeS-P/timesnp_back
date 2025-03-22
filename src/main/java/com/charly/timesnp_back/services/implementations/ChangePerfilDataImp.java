@@ -62,8 +62,9 @@ public class ChangePerfilDataImp implements IChangePerfilData {
         perfilDTO.getApellidoPaterno().ifPresent(perfil::setApellidoPaterno);
         perfilDTO.getApellidoMaterno().ifPresent(perfil::setApellidoMaterno);
         perfilDTO.getTelefono().ifPresent(perfil::setTelefono);
-        perfilDTO.getFoto().ifPresent(perfil::setFoto);
-        perfilDTO.getReferido().ifPresent(perfil::setReferido);
+        perfilDTO.getFechaNacimiento().ifPresent(perfil::setFechaNacimiento);
+        perfilDTO.getGenero().ifPresent(perfil::setGenero);
+        perfilDTO.getDescripcion().ifPresent(perfil::setDescripcion);
 
         // Guardar el perfil en el repositorio
         userInfoRepository.save(perfil);

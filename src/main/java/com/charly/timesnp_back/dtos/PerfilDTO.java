@@ -1,5 +1,6 @@
 package com.charly.timesnp_back.dtos;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class PerfilDTO {
     private Optional<String> apellidoPaterno = Optional.empty();
     private Optional<String> apellidoMaterno = Optional.empty();
     private Optional<String> telefono = Optional.empty();
-    private Optional<String> foto = Optional.empty();
-    private Optional<String> referido = Optional.empty();
+    private Optional<Date> fechaNacimiento = Optional.empty();
+    private Optional<String> genero = Optional.empty();
+    private Optional<String> descripcion = Optional.empty();
 }
