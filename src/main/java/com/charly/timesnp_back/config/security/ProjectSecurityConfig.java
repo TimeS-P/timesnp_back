@@ -94,14 +94,16 @@ public class ProjectSecurityConfig {
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
                         "/api/validate_token",
-                        "/api/resources/**",
-                        "/api/updateUserInfo"
+                        "/api/resources/upload",
+                        "/api/resources/delete",
+                        "/api/updateUserInfo",
+                        "/api/resources/gcp/upload"
                 ).authenticated()
-                .requestMatchers(
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
                         "/api/send-denied-verification"
                 ).hasRole("VERIFICADOR")
-                .requestMatchers(
+                .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
                 .requestMatchers(
