@@ -27,7 +27,7 @@ public class GcpCloudStorageResourcesController {
      * @return respuesta de la petición
      */
     @PostMapping("/upload")
-    public ResponseEntity<ApiResponseTemplate<Object>> uploadFile(
+    public ResponseEntity<ApiResponseTemplate<String>> uploadFile(
             @RequestParam("file") MultipartFile file
     ) {
 
@@ -57,7 +57,7 @@ public class GcpCloudStorageResourcesController {
      * @return respuesta de la petición
      */
     @DeleteMapping("/delete/{fileName}")
-    public ResponseEntity<ApiResponseTemplate<Object>> deleteFile(
+    public ResponseEntity<ApiResponseTemplate<String>> deleteFile(
             @PathVariable("fileName") String fileName
     ) {
 
@@ -80,6 +80,10 @@ public class GcpCloudStorageResourcesController {
     }
 
     // Enpoint para descargar archivo de Google Cloud Storage
+    /**
+     * @param fileName nombre del archivo a descargar
+     * @return archivo en bytes
+     */
     @GetMapping(value = "/download/{fileName}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> downloadFile(
             @PathVariable("fileName") String fileName
@@ -91,6 +95,34 @@ public class GcpCloudStorageResourcesController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Enpoint para generar URL firmada de Google Cloud Storage
+    /**
+     * @param fileName nombre del archivo a generar la URL
+     * @return URL firmada
+     */
+    @GetMapping("/signed-url/{fileName}")
+    public ResponseEntity<ApiResponseTemplate<String>> generateSignedUrl(
+            @PathVariable("fileName") String fileName
+    ) {
+
+        try {
+
+            // Generamos la URL firmada para el archivo de Google Cloud Storage
+            String signedUrl = gcpStorageService.generateSignedUrl(fileName).toString();
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("URL firmada generada correctamente", signedUrl));
+
+        } catch (Exception e) {
+            log.error("ERROR AL GENERAR LA URL FIRMADA: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error(e.getMessage()));
+
+        }
+
     }
 
 

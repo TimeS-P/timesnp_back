@@ -101,6 +101,9 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**"
                 ).hasRole("USUARIO")
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
+                        "/api/resources/gcp/signed-url/**"
+                ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO O PROVEEDOR
                         "/api/resources/gcp/upload",
                         "/api/resources/gcp/delete/**"
