@@ -4,11 +4,9 @@ import com.charly.timesnp_back.services.implementations.GcpStorageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -24,6 +22,10 @@ public class GcpCloudStorageResourcesController {
     private final GcpStorageServiceImpl gcpStorageService;
 
     // Enpoint para subir archivo a Google Cloud Storage
+    /**
+     * @param file archivo a subir del tipo MultipartFile (FormData)
+     * @return respuesta de la petición
+     */
     @PostMapping("/upload")
     public ResponseEntity<ApiResponseTemplate<Object>> uploadFile(
             @RequestParam("file") MultipartFile file
@@ -31,12 +33,14 @@ public class GcpCloudStorageResourcesController {
 
         try {
 
+            String uniqueFileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
             // Subimos el archivo a Google Cloud Storage
-            gcpStorageService.uploadFile(file.getOriginalFilename(), file.getBytes(), file.getContentType());
+            gcpStorageService.uploadFile(uniqueFileName, file.getBytes(), file.getContentType());
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(ApiResponseTemplate.ok("Archivo subido correctamente", null));
+                    .body(ApiResponseTemplate.ok("Archivo subido correctamente", uniqueFileName));
 
         } catch (Exception e) {
             log.error("ERROR AL SUBIR EL ARCHIVO: {}", e.getMessage());
@@ -46,5 +50,48 @@ public class GcpCloudStorageResourcesController {
         }
 
     }
+
+    // Enpoint para eliminar archivo de Google Cloud Storage
+    /**
+     * @param fileName nombre del archivo a eliminar
+     * @return respuesta de la petición
+     */
+    @DeleteMapping("/delete/{fileName}")
+    public ResponseEntity<ApiResponseTemplate<Object>> deleteFile(
+            @PathVariable("fileName") String fileName
+    ) {
+
+        try {
+
+            // Eliminamos el archivo de Google Cloud Storage
+            gcpStorageService.deleteFile(fileName);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("Archivo eliminado correctamente", fileName));
+
+        } catch (Exception e) {
+            log.error("ERROR AL ELIMINAR EL ARCHIVO: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error(e.getMessage()));
+
+        }
+
+    }
+
+    // Enpoint para descargar archivo de Google Cloud Storage
+    @GetMapping(value = "/download/{fileName}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> downloadFile(
+            @PathVariable("fileName") String fileName
+    ) {
+        try {
+            // Descargamos el archivo de Google Cloud Storage y retornamos el contenido en bytes
+            byte[] fileContent = gcpStorageService.downloadFile(fileName);
+            return ResponseEntity.ok(fileContent);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

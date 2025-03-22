@@ -16,10 +16,9 @@ public interface IGcpStorageService {
     /**
      * Elimina un archivo de Google Cloud Storage
      * @param fileName archivo a eliminar
-     * @return mensaje de confirmación
      * @throws Exception si ocurre un error al eliminar el archivo
      */
-    public String deleteFile(String fileName) throws Exception;
+    public void deleteFile(String fileName) throws Exception;
 
     // Download file
     /**

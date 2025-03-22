@@ -96,9 +96,15 @@ public class ProjectSecurityConfig {
                         "/api/validate_token",
                         "/api/resources/upload",
                         "/api/resources/delete",
-                        "/api/updateUserInfo",
-                        "/api/resources/gcp/upload"
+                        "/api/updateUserInfo"
                 ).authenticated()
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
+                        "/api/resources/gcp/download/**"
+                ).hasRole("USUARIO")
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO O PROVEEDOR
+                        "/api/resources/gcp/upload",
+                        "/api/resources/gcp/delete/**"
+                ).hasAnyRole("USUARIO", "PROVEEDOR")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
                         "/api/send-denied-verification"

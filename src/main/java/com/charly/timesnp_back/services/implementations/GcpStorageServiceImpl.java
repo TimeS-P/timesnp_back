@@ -44,12 +44,20 @@ public class GcpStorageServiceImpl implements IGcpStorageService {
 
     /**
      * @param fileName archivo a eliminar
-     * @return
      * @throws Exception
      */
     @Override
-    public String deleteFile(String fileName) throws Exception {
-        return "";
+    public void deleteFile(String fileName) throws Exception {
+        // Se crea un BlobId combinando el nombre del bucket y el nombre del archivo
+        BlobId blobId = BlobId.of(bucketName, fileName);
+
+        // Se intenta eliminar el archivo usando el cliente 'storage'
+        if (storage.delete(blobId)) {
+            return;
+        }
+
+        // En caso de que no se pueda eliminar el archivo, se lanza una excepción
+        throw new RuntimeException("El archivo no existe: " + fileName);
     }
 
     /**
@@ -84,7 +92,7 @@ public class GcpStorageServiceImpl implements IGcpStorageService {
         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, fileName)).build();
 
         // Generamos al URL firmada con una duración de 15 minutos y con la opción de firmado v4
-        URL signedUrl = storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+        URL signedUrl = storage.signUrl(blobInfo, 5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
         return signedUrl;
     }
