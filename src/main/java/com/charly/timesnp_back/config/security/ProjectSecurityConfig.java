@@ -3,6 +3,11 @@ package com.charly.timesnp_back.config.security;
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
 import com.charly.timesnp_back.filter.*;
+import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
+import com.charly.timesnp_back.filter.CsrfCookieFilter;
+import com.charly.timesnp_back.filter.JWTTokenGeneratorFilter;
+import com.charly.timesnp_back.filter.JWTTokenValidatorFilter;
+import com.charly.timesnp_back.services.PerfilServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +39,7 @@ public class ProjectSecurityConfig {
 
     // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
+    private final PerfilServiceImpl perfilService;
 
     /**
      * This method is in charge of creating the security filter chain
@@ -79,7 +85,7 @@ public class ProjectSecurityConfig {
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
-                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
+                .addFilterAfter(new JWTTokenGeneratorFilter(perfilService), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
                 .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
                 .addFilterBefore(rateLimitingFilter, JWTTokenValidatorFilter.class) // Se valida el rate limiting antes de la validación del token JWT y la autenticación básica
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// ONLY HTTP
@@ -92,15 +98,25 @@ public class ProjectSecurityConfig {
                         "/api/cambiar_contrasena",
                         "/api/forgot_password",
                         "/api/validate_token",
-                        "/api/resources/**",
+                        "/api/resources/upload",
+                        "/api/resources/delete",
                         "/api/updateUserInfo"
-                        
                 ).authenticated()
-                .requestMatchers(
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
+                        "/api/resources/gcp/download/**"
+                ).hasRole("USUARIO")
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
+                        "/api/resources/gcp/signed-url/**"
+                ).hasRole("VERIFICADOR")
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO O PROVEEDOR
+                        "/api/resources/gcp/upload",
+                        "/api/resources/gcp/delete/**"
+                ).hasAnyRole("USUARIO", "PROVEEDOR")
+                .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
                         "/api/send-denied-verification"
                 ).hasRole("VERIFICADOR")
-                .requestMatchers(
+                .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
                 .requestMatchers(

@@ -41,3 +41,6 @@ build/
 #application-prod.properties
 #src/main/resources/application-prod.properties
 
+# Ignore Google Credentials
+timesnpsynertech-e5f709e3b0d3.json
+
