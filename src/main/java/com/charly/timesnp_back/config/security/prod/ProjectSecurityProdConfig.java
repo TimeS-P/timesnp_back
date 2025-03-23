@@ -6,6 +6,7 @@ import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
 import com.charly.timesnp_back.filter.CsrfCookieFilter;
 import com.charly.timesnp_back.filter.JWTTokenGeneratorFilter;
 import com.charly.timesnp_back.filter.JWTTokenValidatorFilter;
+import com.charly.timesnp_back.services.PerfilServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ public class ProjectSecurityProdConfig {
 
     // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
+    private final PerfilServiceImpl perfilService;
 
     /**
      * This method is in charge of creating the security filter chain
@@ -82,7 +84,7 @@ public class ProjectSecurityProdConfig {
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
-                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
+                .addFilterAfter(new JWTTokenGeneratorFilter(perfilService), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
                 .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure());// ONLY HTTPS
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente

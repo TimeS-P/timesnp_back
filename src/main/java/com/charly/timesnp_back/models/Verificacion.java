@@ -35,6 +35,9 @@ public class Verificacion {
     @Column(name = "url_foto_credencial", nullable = true, length = 300)
     private String url_foto_credencial;
 
+    @Column(name = "url_foto_credencial_trasera", nullable = true, length = 300)
+    private String url_foto_credencial_trasera;
+
     @Column(name = "fecha_verificacion", nullable = true, length = 300)
     private Date fecha_verificacion;
 

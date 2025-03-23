@@ -76,6 +76,9 @@ public class Perfil {
     @OneToMany(mappedBy = "remitente")
     private List<Mensaje> mensajesEmisor;
 
+    @Column(name = "codigo_compartir", nullable = true, length = 300)
+    private String codigoCompartir;
+
     public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String referido) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -87,4 +90,16 @@ public class Perfil {
         this.referido = referido;
     }
 
+    public Perfil(String nombre, Usuario usuario, String codigoCompartir) {
+        this.nombre = nombre;
+        this.usuario = usuario;
+        this.codigoCompartir = codigoCompartir;
+    }
+
+    public static String generateShareCode(String email) {
+        // Obtener datos antes del arroba
+        String emailName = email.split("@")[0];
+
+        return emailName + "-" + System.currentTimeMillis();
+    }
 }
