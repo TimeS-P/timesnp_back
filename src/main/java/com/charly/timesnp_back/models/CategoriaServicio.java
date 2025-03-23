@@ -3,6 +3,8 @@ package com.charly.timesnp_back.models;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +38,7 @@ public class CategoriaServicio {
     private String icono;
 
     @OneToMany(mappedBy = "categoriaServicio")
+    @JsonIgnore
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     public CategoriaServicio(String nombre, String descripcion, String icono) {

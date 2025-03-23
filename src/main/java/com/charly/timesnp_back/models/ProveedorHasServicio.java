@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,6 +28,7 @@ import jakarta.persistence.Table;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ProveedorHasServicio {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,6 +54,7 @@ public class ProveedorHasServicio {
     private Proveedor proveedor;
 
     @OneToOne(mappedBy = "proveedorHasServicio")
+    @JsonIgnore
     private ServicioGeneral servicioGeneral;
 
     @OneToMany(mappedBy = "proveedorHasServicio")

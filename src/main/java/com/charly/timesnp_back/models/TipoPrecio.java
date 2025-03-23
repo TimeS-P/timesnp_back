@@ -3,6 +3,9 @@ package com.charly.timesnp_back.models;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +22,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class TipoPrecio {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +33,7 @@ public class TipoPrecio {
     private String unidad_medida;
 
     @OneToMany(mappedBy = "tipoPrecio")
+    @JsonIgnore
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     public TipoPrecio(String unidad_medida) {

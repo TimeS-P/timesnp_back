@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -62,18 +64,23 @@ public class Perfil {
     private Verificacion verificacion;
 
     @OneToOne(mappedBy = "perfil")
+    @JsonIgnore
     private Proveedor proveedor;
 
     @OneToMany(mappedBy = "perfil")
+    @JsonIgnore
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "perfil")
+    @JsonIgnore
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "emisor")
+    @JsonIgnore
     private List<Mensaje> mensajesReceptor;
 
     @OneToMany(mappedBy = "remitente")
+    @JsonIgnore
     private List<Mensaje> mensajesEmisor;
 
     public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String referido) {
