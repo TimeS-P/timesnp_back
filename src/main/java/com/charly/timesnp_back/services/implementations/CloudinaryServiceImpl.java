@@ -2,6 +2,7 @@ package com.charly.timesnp_back.services.implementations;
 
 import com.charly.timesnp_back.services.ICloudinaryService;
 import com.cloudinary.Cloudinary;
+import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -51,12 +53,17 @@ public class CloudinaryServiceImpl implements ICloudinaryService {
     }
 
     /**
-     * @param imageId ID de la imagen a eliminar
+     * @param ids IDs de las imágenes a eliminar
      * @return
      * @throws Exception
      */
     @Override
-    public String deleteImage(String imageId) throws Exception {
-        return "";
+    public ApiResponse deleteImage(List<String> ids) throws Exception {
+
+
+        ApiResponse response = cloudinary.api().deleteResources(ids, ObjectUtils.emptyMap());
+
+        return response;
+
     }
 }

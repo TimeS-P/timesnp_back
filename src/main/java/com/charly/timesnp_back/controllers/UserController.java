@@ -40,19 +40,22 @@ public class UserController {
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
                         .body(ApiResponseTemplate.ok("Usuario registrado exitosamente", newUser));
-            } else {
-                // Retornamos una mala respuesta
-                return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(ApiResponseTemplate.error("Ocurrio un error al registrar al usuario"));
             }
 
-        } catch (Exception e) {
-            log.error("Error al registrar usuario", e);
             // Retornamos una mala respuesta
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponseTemplate.error("Ocurrio un error al registrar al usuario"));
+
+        } catch (IllegalArgumentException e) {
+            log.error("Error al registrar usuario: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponseTemplate.error(e.getMessage()));
+
+        } catch (Exception e) {
+            log.error("Error inesperado al registrar usuario", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Ocurrió un error inesperado"));
         }
     }
 

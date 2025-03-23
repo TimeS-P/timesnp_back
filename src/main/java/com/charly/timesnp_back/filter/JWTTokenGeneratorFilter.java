@@ -1,7 +1,9 @@
 package com.charly.timesnp_back.filter;
 
 import com.charly.timesnp_back.constants.ApplicationConstants;
+import com.charly.timesnp_back.models.Perfil;
 import com.charly.timesnp_back.models.Usuario;
+import com.charly.timesnp_back.services.PerfilServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -9,6 +11,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
+@Slf4j
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
+
+    private final PerfilServiceImpl perfilService;
+
     /**
      * @param request
      * @param response
@@ -36,6 +45,12 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
         // Obtenemos el usuario autenticado
         Usuario user = (Usuario) authentication.getPrincipal();
+        Perfil perfil = null;
+        try {
+             perfil = perfilService.getPerfilByUserEmail(user.getEmail());
+        } catch (Exception e) {
+            log.error("Error al obtener el perfil del usuario autenticado en JWTTokenGeneratorFilter: {}", e.getMessage());
+        }
 
         if (authentication != null) {
             // Obtenemos el secret key de las variables de entorno
@@ -58,6 +73,12 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                         ) // Claim de authorities (Roles) del usuario separados por coma
                         //Claim para agregar si la cuenta esta bloqueada o no
                         .claim("accountNonLocked", user.isAccountNonLocked())
+                        //Claim para agregar el nombre, apellidos y el share code del perfil
+                        .claim("name", perfil != null ? perfil.getNombre() : "")
+                        .claim("lastName", perfil != null ? perfil.getApellidoPaterno() + " " + perfil.getApellidoMaterno() : "")
+                        .claim("shareCode", perfil != null ? perfil.getCodigoCompartir() : "")
+                        // Claim para saber si el usuario esta verificado
+                        .claim("isVerified", perfil != null && perfil.getVerificacion() != null)
                         .issuedAt(new Date()) // Fecha de emisión
                         // Expiration time de 8 horas
                         .expiration(new Date(new Date().getTime() + 1000 * 60 * 60 * 8))
