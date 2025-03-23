@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class RegisterUserDto {
 
+    private String nombre;
     private String email;
     private String password;
     // List of  roles that the user has

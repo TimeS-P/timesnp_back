@@ -1,6 +1,5 @@
 package com.charly.timesnp_back.models;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,23 +44,14 @@ public class Perfil {
     @Column(name = "telefono", nullable = true, length = 10)
     private String telefono;
 
-    @Column(name = "fecha_nacimiento", nullable = true, length = 300)
-    private Date fechaNacimiento;
-
-    @Column(name = "genero", nullable = true, length = 255)
-    private String genero;
-
-    @Column(name = "descripcion", nullable = true, length = 100)
-    private String descripcion;
-
     @Column(name = "foto", nullable = true, length = 300)
     private String foto;
 
     @Column(name = "puntos", nullable = true, columnDefinition = "int default 0")
     private int puntos;
 
-    @Column(name = "codigo_compartir", nullable = true, length = 300)
-    private String codigoCompartir;
+    @Column(name = "referido", nullable = true, length = 300)
+    private String referido;
     
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -86,17 +76,30 @@ public class Perfil {
     @OneToMany(mappedBy = "remitente")
     private List<Mensaje> mensajesEmisor;
 
-    public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, Date fechaNacimiento, String genero, String descripcion, String foto, Usuario usuario, int puntos, String codigoCompartir) {
+    @Column(name = "codigo_compartir", nullable = true, length = 300)
+    private String codigoCompartir;
+
+    public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String referido) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.telefono = telefono;
-        this.fechaNacimiento = fechaNacimiento;
-        this.genero = genero;
-        this.descripcion = descripcion;
         this.foto = foto;
         this.usuario = usuario;
         this.puntos = puntos;
+        this.referido = referido;
+    }
+
+    public Perfil(String nombre, Usuario usuario, String codigoCompartir) {
+        this.nombre = nombre;
+        this.usuario = usuario;
         this.codigoCompartir = codigoCompartir;
+    }
+
+    public static String generateShareCode(String email) {
+        // Obtener datos antes del arroba
+        String emailName = email.split("@")[0];
+
+        return emailName + "-" + System.currentTimeMillis();
     }
 }
