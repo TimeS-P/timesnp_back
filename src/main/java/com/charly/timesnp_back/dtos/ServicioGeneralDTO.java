@@ -1,9 +1,14 @@
 package com.charly.timesnp_back.dtos;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.charly.timesnp_back.models.Combo;
+import com.charly.timesnp_back.models.Contratacion;
+import com.charly.timesnp_back.models.FotoTrabajo;
+import com.charly.timesnp_back.models.ProveedorHasServicio;
 import com.charly.timesnp_back.models.ServicioGeneral;
 import com.charly.timesnp_back.models.TipoServicio;
 
@@ -24,7 +29,9 @@ public class ServicioGeneralDTO {
     private String descripcion;
     private BigDecimal precio;
     private TipoServicio tipoServicio;
-    private Optional<UUID> idProveedorHasServicio;
+    private Optional<List<FotoTrabajo>> fotosTrabajo;
+    private Optional<ProveedorHasServicio> idProveedorHasServicio;
+    private Optional<List<Contratacion>> contrataciones;
     private Optional<UUID> idCombo;
 
     public static ServicioGeneralDTO fromEntity(ServicioGeneral servicioGeneral) {
@@ -34,7 +41,9 @@ public class ServicioGeneralDTO {
       servicioGeneralDTO.setDescripcion(servicioGeneral.getDescripcion());
       servicioGeneralDTO.setPrecio(servicioGeneral.getPrecio());
       servicioGeneralDTO.setTipoServicio(servicioGeneral.getTipoServicio());
-      servicioGeneralDTO.setIdProveedorHasServicio(Optional.ofNullable(servicioGeneral.getProveedorHasServicio() != null ? servicioGeneral.getProveedorHasServicio().getId() : null));
+      servicioGeneralDTO.setFotosTrabajo(Optional.ofNullable(servicioGeneral.getFotos()));
+      servicioGeneralDTO.setContrataciones(Optional.ofNullable(servicioGeneral.getContrataciones()));
+      servicioGeneralDTO.setIdProveedorHasServicio(Optional.ofNullable(servicioGeneral.getProveedorHasServicio() != null ? servicioGeneral.getProveedorHasServicio(): null));
       servicioGeneralDTO.setIdCombo(Optional.ofNullable(servicioGeneral.getCombo() != null ? servicioGeneral.getCombo().getId() : null));
       return servicioGeneralDTO;
   }

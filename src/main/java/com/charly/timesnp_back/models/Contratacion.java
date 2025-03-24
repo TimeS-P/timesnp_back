@@ -9,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -48,11 +50,13 @@ public class Contratacion {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_perfil", nullable = true)
+    @JsonIgnore
     private Perfil perfil;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_servicio_general", nullable = true)
+    @JsonIgnore
     private ServicioGeneral servicioGeneral;
 
     @OneToMany(mappedBy = "contratacion")

@@ -2,6 +2,7 @@ package com.charly.timesnp_back.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,11 @@ public class Servicios implements IServicios {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public ServicioGeneral obtenerServicioPorId(UUID id) {
+        return servicesProveedorRepository.findById(id).orElse(null);
     }
 
 }

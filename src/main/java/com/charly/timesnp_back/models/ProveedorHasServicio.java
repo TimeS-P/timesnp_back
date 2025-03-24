@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,7 @@ public class ProveedorHasServicio {
     @Column(name = "calificacion", nullable = true, columnDefinition = "int default 0")
     private int calificacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_tipo_precio", nullable = false)
     private TipoPrecio tipoPrecio;
@@ -46,9 +47,10 @@ public class ProveedorHasServicio {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_categoria_servicio", nullable = false)
+    @JsonIgnore
     private CategoriaServicio categoriaServicio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;

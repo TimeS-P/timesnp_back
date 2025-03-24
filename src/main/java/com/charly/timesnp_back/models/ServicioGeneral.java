@@ -51,7 +51,7 @@ public class ServicioGeneral {
     @Column(name = "tipo_servicio", nullable = false, length = 20)
     private TipoServicio tipoServicio;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor_has_servicio", nullable = true)
     private ProveedorHasServicio proveedorHasServicio;
@@ -62,7 +62,6 @@ public class ServicioGeneral {
     private Combo combo;
 
     @OneToMany(mappedBy = "servicioGeneral")
-    @JsonIgnore
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "servicioGeneral")

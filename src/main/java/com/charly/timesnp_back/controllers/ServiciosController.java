@@ -39,5 +39,17 @@ public class ServiciosController {
         }
     }
     
+    @GetMapping("/servicio")
+    public ResponseEntity<ApiResponseTemplate<ServicioGeneralDTO>> getMethodName(@RequestParam UUID id) {
+        try {
+            ServicioGeneral servicio = servicios.obtenerServicioPorId(id);
+            ServicioGeneralDTO servicioDTO = ServicioGeneralDTO.fromEntity(servicio);
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Servicio obtenido correctamente", servicioDTO));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error al obtener el servicio: " + e.getMessage()));
+        }
+    }
+    
+    
 
 }

@@ -36,7 +36,7 @@ public class Proveedor {
     @Column(name = "rfc", nullable = true, length = 100)
     private String rfc;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;

@@ -112,7 +112,8 @@ public class ProjectSecurityConfig {
                         "/api/send-email", //En teoría tenemos que proteger esta ruta, sin embargo el usuario no está logueado para este punto, por lo que habrá que resolverlo
                         "/error",
                         "/invalidSession",
-                        "/api/servicios/serviciosCategoria"
+                        "/api/servicios/serviciosCategoria",
+                        "/api/servicios/servicio"
                 ).permitAll()
         );
 
