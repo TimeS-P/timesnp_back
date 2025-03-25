@@ -41,6 +41,9 @@ public class VerificarCorreo {
     @Column(name="token", nullable = false, length = 300)
     private String token;
 
+    @Column(name = "isVerificado", nullable = false)
+    private boolean isVerificado = false;
+
     public VerificarCorreo(Usuario usuario, String token) {
         this.usuario = usuario;
         this.token = token;
