@@ -2,10 +2,7 @@ package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
-import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
-import com.charly.timesnp_back.filter.CsrfCookieFilter;
-import com.charly.timesnp_back.filter.JWTTokenGeneratorFilter;
-import com.charly.timesnp_back.filter.JWTTokenValidatorFilter;
+import com.charly.timesnp_back.filter.*;
 import com.charly.timesnp_back.services.PerfilServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +44,7 @@ public class ProjectSecurityProdConfig {
      * @throws Exception
      */
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitingFilter rateLimitingFilter) throws Exception {
 
         // Para manejar el token CSRF que se manda en la request (El token que se manda en la Cookie se maneja automáticamente)
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
@@ -86,6 +83,7 @@ public class ProjectSecurityProdConfig {
                 .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new JWTTokenGeneratorFilter(perfilService), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
                 .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
+                .addFilterBefore(rateLimitingFilter, JWTTokenValidatorFilter.class) // Se valida el rate limiting antes de la validación del token JWT y la autenticación básica
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure());// ONLY HTTPS
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
@@ -141,6 +139,11 @@ public class ProjectSecurityProdConfig {
     public PasswordEncoder passwordEncoder() {
         // Default password encoder (bcrypt)
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public RateLimitingFilter rateLimitingFilter() {
+        return new RateLimitingFilter();
     }
 
 }
