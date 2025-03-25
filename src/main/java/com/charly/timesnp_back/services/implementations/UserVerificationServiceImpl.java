@@ -43,7 +43,7 @@ public class UserVerificationServiceImpl implements IUserVerificationService {
 
         String link = activeProfile.equals("dev")
                 ? "http://localhost:8080/verify-email?token=" + token
-                : "https://timesnp-back.herokuapp.com/verify-email?token=" + token;
+                : "https://timesnp.com/verify-email?token=" + token;
 
         // Enviamos el email de verificación
         String message = "¡Hola! Para verificar tu correo, haz click en el siguiente enlace: " + link + token;
