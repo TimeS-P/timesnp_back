@@ -8,6 +8,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,6 +30,7 @@ import jakarta.persistence.Table;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
+
 public class ServicioGeneral {
 
     @Id
@@ -48,7 +51,7 @@ public class ServicioGeneral {
     @Column(name = "tipo_servicio", nullable = false, length = 20)
     private TipoServicio tipoServicio;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor_has_servicio", nullable = true)
     private ProveedorHasServicio proveedorHasServicio;
@@ -68,7 +71,7 @@ public class ServicioGeneral {
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "servicioGeneral")
-    private List<Mensaje> calificaciones;
+    private List<Mensaje> mensajes;
 
     public ServicioGeneral(String nombre, String descripcion, BigDecimal precio, TipoServicio tipoServicio, ProveedorHasServicio proveedorHasServicio, Combo combo) {
         this.nombre = nombre;

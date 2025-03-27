@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,24 +33,28 @@ public class Proveedor {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "nombre", nullable = true, length = 100)
+    @Column(name = "rfc", nullable = true, length = 100)
     private String rfc;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonIgnore
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonIgnore
     private List<Combo> combos;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonIgnore
     private List<SolicitudCombo> solicitudCombos;
 
     @OneToMany(mappedBy = "proveedor")
+    @JsonIgnore
     private List<ComboHasProveedor> comboHasProveedores;
 
     public Proveedor(String rfc, Perfil perfil) {

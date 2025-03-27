@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -53,7 +55,7 @@ public class Perfil {
     @Column(name = "referido", nullable = true, length = 300)
     private String referido;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
@@ -62,18 +64,23 @@ public class Perfil {
     private Verificacion verificacion;
 
     @OneToOne(mappedBy = "perfil")
+    @JsonIgnore
     private Proveedor proveedor;
 
     @OneToMany(mappedBy = "perfil")
+    @JsonIgnore
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "perfil")
+    @JsonIgnore
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "emisor")
+    @JsonIgnore
     private List<Mensaje> mensajesReceptor;
 
     @OneToMany(mappedBy = "remitente")
+    @JsonIgnore
     private List<Mensaje> mensajesEmisor;
 
     @Column(name = "codigo_compartir", nullable = true, length = 300)
