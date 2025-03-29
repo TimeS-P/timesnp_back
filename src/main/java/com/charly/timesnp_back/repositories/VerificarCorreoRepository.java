@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface VerificarCorreoRepository extends JpaRepository<VerificarCorreo, UUID> {
 
 
-
+    VerificarCorreo findByToken(String token);
 }

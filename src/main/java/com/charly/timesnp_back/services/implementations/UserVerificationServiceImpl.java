@@ -29,8 +29,26 @@ public class UserVerificationServiceImpl implements IUserVerificationService {
      * @return
      */
     @Override
-    public String verifyEmail(Usuario usuario, String token) {
-        return "";
+    public void verifyEmail(Usuario usuario, String token) throws Exception {
+
+        // Verificamos si el token existe en la base de datos
+        VerificarCorreo verificarCorreo = verificarCorreoRepository.findByToken(token);
+
+        // Si el token no existe, lanzamos una excepción
+        if (verificarCorreo == null) {
+            throw new RuntimeException("Token no válido");
+        }
+
+        // Si el token existe, verificamos el email del usuario
+        if (verificarCorreo.getUsuario().getEmail().equals(usuario.getEmail())) {
+            verificarCorreo.setVerificado(true);
+
+            // Guardamos el verificarCorreo actualizado
+            verificarCorreoRepository.save(verificarCorreo);
+        } else {
+            throw new RuntimeException("El token no corresponde al usuario logueado");
+        }
+
     }
 
     /**
@@ -41,12 +59,17 @@ public class UserVerificationServiceImpl implements IUserVerificationService {
         // Generamos un token en base a un UUID y el email del usuario hashedeado con SHA-256
         String token = UUID.randomUUID().toString() + usuario.getEmail().hashCode();
 
+        // Recordamos el token a 100 caracteres
+        if (token.length() > 40) {
+            token = token.substring(0, 40);
+        }
+
         String link = activeProfile.equals("dev")
                 ? "http://localhost:8080/verify-email?token=" + token
                 : "https://timesnp.com/verify-email?token=" + token;
 
         // Enviamos el email de verificación
-        String message = "¡Hola! Para verificar tu correo, haz click en el siguiente enlace: " + link + token;
+        String message = "¡Hola! Para verificar tu correo, haz click en el siguiente enlace: " + link;
         EmailDTO emailDTO = new EmailDTO(
                 usuario.getEmail(),
                 "Verifica tu correo",

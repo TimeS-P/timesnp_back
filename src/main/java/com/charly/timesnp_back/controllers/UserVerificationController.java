@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +26,28 @@ public class UserVerificationController {
     private final UserVerificationServiceImpl userVerificationService;
 
     @GetMapping("/email/{token}")
-    public String verifyEmail() {
-        return "Email verificado";
+    public ResponseEntity<ApiResponseTemplate<String>> verifyEmail(
+            @PathVariable("token") String token
+    ) {
+
+        try {
+            // Get the authenticated user from  the SecurityContextHolder
+            Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            // Verify the email
+            userVerificationService.verifyEmail(usuario, token);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("Correo verificado", "El correo del usuario " + usuario.getEmail() + " ha sido verificado"));
+
+        } catch (Exception e) {
+            log.error("Error al verificar el correo", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al verificar el correo"));
+        }
+
     }
 
     @GetMapping("/email")

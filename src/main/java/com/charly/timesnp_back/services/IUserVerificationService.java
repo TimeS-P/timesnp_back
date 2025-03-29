@@ -7,9 +7,8 @@ public interface IUserVerificationService {
 
     /**
      * Verifica el email de un usuario
-     * @return mensaje de confirmación
      */
-    public String verifyEmail(Usuario usuario, String token);
+    public void verifyEmail(Usuario usuario, String token) throws Exception;
 
     /**
      * Solicita la verificación del email de un usuario

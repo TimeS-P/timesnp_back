@@ -86,7 +86,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                         .compact();
 
                 // Añadimos el token al header de la respuesta
-                response.addHeader(ApplicationConstants.JWT_HEADER, jwt);
+                response.setHeader(ApplicationConstants.JWT_HEADER, jwt);
             }
         }
 
