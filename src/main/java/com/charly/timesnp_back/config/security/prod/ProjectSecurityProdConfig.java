@@ -112,10 +112,12 @@ public class ProjectSecurityProdConfig {
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
-                        "/api/verification/email/**"
+                        "/api/verification/email/**",
+                        "/api/verification/ine"
                 ).hasRole("USUARIO")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
-                        "/api/resources/gcp/signed-url/**"
+                        "/api/resources/gcp/signed-url/**",
+                        "/api/verification/ine/verify"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO O PROVEEDOR
                         "/api/resources/gcp/upload",
