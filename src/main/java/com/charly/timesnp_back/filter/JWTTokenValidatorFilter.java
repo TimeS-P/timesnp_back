@@ -1,6 +1,8 @@
 package com.charly.timesnp_back.filter;
 
 import com.charly.timesnp_back.constants.ApplicationConstants;
+import com.charly.timesnp_back.models.Usuario;
+import com.charly.timesnp_back.repositories.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -8,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +23,15 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+@RequiredArgsConstructor
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
+
+    /**
+     * Inyectamos el environment para obtener la secret key
+     */
+    private final Environment env;
+    private final UsuarioRepository usuarioRepository;
+
     /**
      * @param request
      * @param response
@@ -36,7 +47,6 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         if (jwt != null) {
             try {
                 // Obtnemeos el environment para obtener la secret key
-                Environment env = getEnvironment();
                 if (env != null) {
 
                     // En caso de  que no se encuentre la variable de entorno, se asigna un valor por defecto
@@ -55,9 +65,14 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                         String username = String.valueOf(claims.get("username"));
                         String authorities = String.valueOf(claims.get("authorities"));
 
+                        // Obtenemos al usuario autenticado
+                        Usuario user = usuarioRepository.findByEmail(username).orElseThrow(
+                                () -> new BadCredentialsException("USUARIO NO ENCONTRADO")
+                        );
+
                         // Si el token es válido, se crea un nuevo token de autenticación con el usuario autenticado
                         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                                username,
+                                user,
                                 null,
                                 AuthorityUtils.commaSeparatedStringToAuthorityList(authorities) // Convertimos los roles a una lista de GrantedAuthority
                         );
@@ -68,7 +83,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                 }
 
             } catch (Exception e) {
-                throw new BadCredentialsException("INVALID TOKEN RECEIVED");
+                throw new BadCredentialsException("INVALID TOKEN RECEIVED:" + e.getMessage());
             }
 
         }

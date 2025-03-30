@@ -33,5 +33,16 @@ public class GlobalExceptionHandler {
                 .body(ApiResponseTemplate.error("El tamaño del archivo excede el máximo permitidod de 10MB."));
     }
 
+    // Global Exception Handler for Exception
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponseTemplate<String>> handleException(Exception ex) {
+        // Loguear el error completo en los logs del servidor
+        logger.error("Error interno del servidor", ex);
+
+        // Responder con un mensaje amigable y no exponer el stack trace
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponseTemplate.error("Error interno del servidor: " + ex.getMessage()));
+    }
+
 
 }

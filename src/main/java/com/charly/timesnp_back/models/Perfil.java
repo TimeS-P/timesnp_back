@@ -1,5 +1,6 @@
 package com.charly.timesnp_back.models;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,6 +86,15 @@ public class Perfil {
 
     @Column(name = "codigo_compartir", nullable = true, length = 300)
     private String codigoCompartir;
+
+    @Column(name = "fecha_nacimiento", nullable = true)
+    private Date fechaNacimiento;
+
+    @Column(name = "genero", nullable = true, length = 1)
+    private String genero;
+
+    @Column(name = "descripcion", nullable = true, length = 300)
+    private String descripcion;
 
     public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String referido) {
         this.nombre = nombre;

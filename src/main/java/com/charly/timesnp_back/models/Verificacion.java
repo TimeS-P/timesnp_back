@@ -33,10 +33,13 @@ public class Verificacion {
     private UUID id;
 
     @Column(name = "url_foto_credencial", nullable = true, length = 300)
-    private String url_foto_credencial;
+    private String filename_foto_credencial;
 
     @Column(name = "url_foto_credencial_trasera", nullable = true, length = 300)
-    private String url_foto_credencial_trasera;
+    private String filename_foto_credencial_trasera;
+
+    @Column(name = "isVerificado", nullable = false)
+    private boolean isVerificado = false;
 
     @Column(name = "fecha_verificacion", nullable = true, length = 300)
     private Date fecha_verificacion;
@@ -47,9 +50,16 @@ public class Verificacion {
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
 
-    public Verificacion(String url_foto_credencial, Date fecha_verificacion, Perfil perfil) {
-        this.url_foto_credencial = url_foto_credencial;
+    public Verificacion(String filename_foto_credencial,String filename_foto_credencial_trasera, Date fecha_verificacion, Perfil perfil) {
+        this.filename_foto_credencial = filename_foto_credencial;
+        this.filename_foto_credencial_trasera = filename_foto_credencial_trasera;
         this.fecha_verificacion = fecha_verificacion;
+        this.perfil = perfil;
+    }
+
+    public Verificacion(String filename_foto_credencial, String filename_foto_credencial_trasera, Perfil perfil) {
+        this.filename_foto_credencial = filename_foto_credencial;
+        this.filename_foto_credencial_trasera = filename_foto_credencial_trasera;
         this.perfil = perfil;
     }
 }

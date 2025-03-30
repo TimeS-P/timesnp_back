@@ -1,21 +1,25 @@
 package com.charly.timesnp_back.config.security.prod;
 
+import com.charly.timesnp_back.config.security.TimeSnpUserDetailsService;
+import com.charly.timesnp_back.config.security.TimeSnpUsernamePwdAuthenticationProvider;
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
-import com.charly.timesnp_back.filter.AuthoritiesLoggingAfterFilters;
-import com.charly.timesnp_back.filter.CsrfCookieFilter;
-import com.charly.timesnp_back.filter.JWTTokenGeneratorFilter;
-import com.charly.timesnp_back.filter.JWTTokenValidatorFilter;
+import com.charly.timesnp_back.filter.*;
+import com.charly.timesnp_back.repositories.UsuarioRepository;
 import com.charly.timesnp_back.services.PerfilServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,6 +43,9 @@ public class ProjectSecurityProdConfig {
     // Inyectamos el bean de la clase TimeSnpAuthenticationEntryPoint por constructor
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
     private final PerfilServiceImpl perfilService;
+    private final UsuarioRepository usuarioRepository;
+
+    private final Environment env;
 
     /**
      * This method is in charge of creating the security filter chain
@@ -47,7 +54,7 @@ public class ProjectSecurityProdConfig {
      * @throws Exception
      */
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitingFilter rateLimitingFilter) throws Exception {
 
         // Para manejar el token CSRF que se manda en la request (El token que se manda en la Cookie se maneja automáticamente)
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
@@ -78,14 +85,16 @@ public class ProjectSecurityProdConfig {
                         csrfConfig -> csrfConfig
                                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                                 .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
-                                        "/api/auth/register"
+                                        "/api/auth/register",
+                                        "/api/auth/loginSecure"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new AuthoritiesLoggingAfterFilters(), BasicAuthenticationFilter.class) // Este filtro se ejecuta después de la autenticación básica
                 .addFilterAfter(new JWTTokenGeneratorFilter(perfilService), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
-                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
+                .addFilterBefore(new JWTTokenValidatorFilter(env, usuarioRepository), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
+                .addFilterBefore(rateLimitingFilter, JWTTokenValidatorFilter.class) // Se valida el rate limiting antes de la validación del token JWT y la autenticación básica
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure());// ONLY HTTPS
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
@@ -102,10 +111,13 @@ public class ProjectSecurityProdConfig {
                         "/api/updateUserInfo"
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
-                        "/api/resources/gcp/download/**"
+                        "/api/resources/gcp/download/**",
+                        "/api/verification/email/**",
+                        "/api/verification/ine"
                 ).hasRole("USUARIO")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
-                        "/api/resources/gcp/signed-url/**"
+                        "/api/resources/gcp/signed-url/**",
+                        "/api/verification/ine/verify"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO O PROVEEDOR
                         "/api/resources/gcp/upload",
@@ -143,6 +155,31 @@ public class ProjectSecurityProdConfig {
     public PasswordEncoder passwordEncoder() {
         // Default password encoder (bcrypt)
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public RateLimitingFilter rateLimitingFilter() {
+        return new RateLimitingFilter();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+
+        // Usamos nuestro custom authentication provider
+        TimeSnpProdUsernamePwdAuthenticationProvider authenticationProvider = new TimeSnpProdUsernamePwdAuthenticationProvider(
+                (TimeSnpUserDetailsService) userDetailsService,
+                passwordEncoder
+        );
+
+        // Configuramos el authentication manager
+        // ProviderManager es la implementación por defecto de AuthenticationManager
+        ProviderManager providerManager = new ProviderManager(authenticationProvider);
+        // Configuramos el authentication manager para que no borre las credenciales después de la autenticación
+        providerManager.setEraseCredentialsAfterAuthentication(false);
+
+        // Retornamos el authentication manager
+        return providerManager;
+
     }
 
 }

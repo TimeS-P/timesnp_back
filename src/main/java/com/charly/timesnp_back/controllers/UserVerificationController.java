@@ -1,0 +1,127 @@
+package com.charly.timesnp_back.controllers;
+
+import com.charly.timesnp_back.models.Usuario;
+import com.charly.timesnp_back.services.implementations.UserVerificationServiceImpl;
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * UserVerificationController para manejar la verificacion de Email e INE
+ */
+
+@RestController
+@RequestMapping("/api/verification")
+@RequiredArgsConstructor
+@Slf4j
+public class UserVerificationController {
+
+    private final UserVerificationServiceImpl userVerificationService;
+
+    @GetMapping("/email/{token}")
+    public ResponseEntity<ApiResponseTemplate<String>> verifyEmail(
+            @PathVariable("token") String token
+    ) {
+
+        try {
+            // Get the authenticated user from  the SecurityContextHolder
+            Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            // Verify the email
+            userVerificationService.verifyEmail(usuario, token);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("Correo verificado", "El correo del usuario " + usuario.getEmail() + " ha sido verificado"));
+
+        } catch (Exception e) {
+            log.error("Error al verificar el correo", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al verificar el correo"));
+        }
+
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<ApiResponseTemplate<String>> requestEmailVerification() {
+
+        // Get the authenticated user from  the SecurityContextHolder
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // Send the email verification request
+        try {
+            userVerificationService.requestEmailVerification(usuario);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("Se ha enviado el correo de verificación", "Correo enviado al usuario " + usuario.getEmail()));
+
+        } catch (MessagingException e) {
+            log.error("Error al enviar el correo de verificación", e);
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al enviar el correo de verificación"));
+
+        }
+    }
+
+    @GetMapping("/ine/verify")
+    public ResponseEntity<ApiResponseTemplate<String>> verifyINE() {
+
+        try {
+
+            // Get the authenticated user from  the SecurityContextHolder
+            Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            // Verify the INE
+            userVerificationService.verifyINE(usuario);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("INE verificado", "El INE del usuario " + usuario.getEmail() + " ha sido verificado"));
+
+
+        } catch (Exception e) {
+            log.error("Error al verificar el INE", e);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al verificar el INE"));
+        }
+
+    }
+
+    @PostMapping("/ine")
+    public ResponseEntity<ApiResponseTemplate<String>> requestINEVerification(
+            @RequestParam("photoFront") MultipartFile photoFront,
+            @RequestParam("photoBack") MultipartFile photoBack
+    ) {
+
+        // Get the authenticated user from  the SecurityContextHolder
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            userVerificationService.requestINEVerification(usuario, photoFront, photoBack);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponseTemplate.ok("Se ha enviado la solicitud de verificación del INE", "Solicitud de verificacion enviado al usuario " + usuario.getEmail()));
+
+        } catch (Exception e) {
+            log.error("Error al enviar la verificación del INE", e);
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al enviar la verificación del INE"));
+
+        }
+
+    }
+
+
+}

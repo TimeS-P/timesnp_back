@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.charly.timesnp_back.dtos.RegisterUserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +44,7 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "usuario")
     private VerificarCorreo verificarCorreo;
 

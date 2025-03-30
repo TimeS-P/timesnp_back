@@ -3,6 +3,7 @@ package com.charly.timesnp_back.models;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -33,6 +34,7 @@ public class VerificarCorreo {
     @Column(name = "expires", nullable = true)
     private Date expires;
 
+    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
@@ -40,6 +42,9 @@ public class VerificarCorreo {
 
     @Column(name="token", nullable = false, length = 300)
     private String token;
+
+    @Column(name = "isVerificado", nullable = false)
+    private boolean isVerificado = false;
 
     public VerificarCorreo(Usuario usuario, String token) {
         this.usuario = usuario;
