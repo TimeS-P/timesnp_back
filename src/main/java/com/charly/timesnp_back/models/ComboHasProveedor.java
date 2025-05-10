@@ -2,6 +2,7 @@ package com.charly.timesnp_back.models;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -38,6 +39,7 @@ public class ComboHasProveedor {
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_combo", nullable = true)
+    @JsonBackReference
     private Combo combo;
 
     public ComboHasProveedor(Proveedor proveedor, Combo combo) {

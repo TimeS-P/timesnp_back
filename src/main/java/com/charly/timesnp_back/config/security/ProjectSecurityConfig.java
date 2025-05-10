@@ -109,7 +109,8 @@ public class ProjectSecurityConfig {
                         "/api/validate_token",
                         "/api/resources/upload",
                         "/api/resources/delete",
-                        "/api/updateUserInfo"
+                        "/api/updateUserInfo",
+                        "/api/combo/get-roles"
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
@@ -135,11 +136,13 @@ public class ProjectSecurityConfig {
                         "/api/testing/public",
                         "/api/auth/**",
                         "/api/contact",
-                        "/api/send-email", //En teoría tenemos que proteger esta ruta, sin embargo el usuario no está logueado para este punto, por lo que habrá que resolverlo
+                        "/api/send-email",
                         "/error",
                         "/invalidSession",
                         "/api/servicios/serviciosCategoria",
-                        "/api/servicios/servicio"
+                        "/api/servicios/servicio",
+                        "api/combo/get-combos"
+
                 ).permitAll()
         );
 

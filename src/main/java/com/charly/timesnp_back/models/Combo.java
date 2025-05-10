@@ -3,6 +3,8 @@ package com.charly.timesnp_back.models;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -32,7 +34,7 @@ public class Combo {
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
@@ -41,6 +43,8 @@ public class Combo {
     private ServicioGeneral servicioGeneral;
 
     @OneToMany(mappedBy = "combo")
+    @JsonBackReference
+    @JsonIgnore
     private List<SolicitudCombo> solicitudCombos;
 
     @OneToOne(mappedBy = "combo")

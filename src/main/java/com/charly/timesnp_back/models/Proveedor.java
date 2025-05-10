@@ -3,6 +3,7 @@ package com.charly.timesnp_back.models;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -46,7 +47,7 @@ public class Proveedor {
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     @OneToMany(mappedBy = "proveedor")
-    @JsonIgnore
+    @JsonBackReference
     private List<Combo> combos;
 
     @OneToMany(mappedBy = "proveedor")
