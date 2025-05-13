@@ -24,5 +24,5 @@ public interface ServicesProveedorRepository extends JpaRepository<ServicioGener
 
     @Query("SELECT s FROM servicio_general s WHERE s.proveedorHasServicio.categoriaServicio.id = :categoria ORDER BY s.proveedorHasServicio.calificacion DESC")
     Optional<List<ServicioGeneral>> findByCategoriaOrCalif(UUID categoria);
-
+    
 }

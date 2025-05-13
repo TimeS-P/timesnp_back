@@ -26,7 +26,7 @@ public class ServiciosController {
     IServicios servicios;
 
     @GetMapping("/serviciosCategoria")
-    public ResponseEntity<ApiResponseTemplate<List<ServicioGeneralDTO>>> getMethodName( @RequestParam UUID idCategoria, @RequestParam String filtro) {
+    public ResponseEntity<ApiResponseTemplate<List<ServicioGeneralDTO>>> getMethodName(@RequestParam UUID idCategoria, @RequestParam String filtro) {
         try {
             ObtenerServiciosDTO obtenerServiciosDTO = new ObtenerServiciosDTO(idCategoria, filtro);
             List<ServicioGeneral> serviciosList = servicios.obtenerServicios(obtenerServiciosDTO).orElse(null);

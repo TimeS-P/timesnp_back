@@ -139,7 +139,8 @@ public class ProjectSecurityConfig {
                         "/error",
                         "/invalidSession",
                         "/api/servicios/serviciosCategoria",
-                        "/api/servicios/servicio"
+                        "/api/servicios/servicio",
+                        "/api/categorias/obtenerCategoriasServicios"
                 ).permitAll()
         );
 
