@@ -34,7 +34,7 @@ public class FotoTrabajo {
     @Column(name = "url_foto", nullable = true)
     private String url_foto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_servicio_general", nullable = false)
     @JsonIgnore

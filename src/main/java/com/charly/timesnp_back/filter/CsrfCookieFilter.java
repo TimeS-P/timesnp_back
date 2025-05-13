@@ -23,7 +23,7 @@ public class CsrfCookieFilter extends OncePerRequestFilter {
         // Obtiene el token CSRF de la petición
         CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         // Se genera el token CSRF y se añade a la cookie
-        // Esto porque en la SecurityConfig se genera de manera Lazy, entonces en este caso se genera de manera explícita
+        // Esto porque en la SecurityConfig se genera de manera EAGER, entonces en este caso se genera de manera explícita
         // Para que el cliente pueda acceder a él
         csrfToken.getToken();
         // Continúa con la cadena de filtros de la petición

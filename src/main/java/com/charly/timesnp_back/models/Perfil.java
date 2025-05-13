@@ -56,7 +56,7 @@ public class Perfil {
     @Column(name = "referido", nullable = true, length = 300)
     private String referido;
     
-    @OneToOne()
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;

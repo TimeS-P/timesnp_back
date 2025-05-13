@@ -48,6 +48,7 @@ public class Combo {
     private List<SolicitudCombo> solicitudCombos;
 
     @OneToOne(mappedBy = "combo")
+    @JsonIgnore
     private ComboHasProveedor comboHasProveedor;
 
     public Combo(Proveedor proveedor) {

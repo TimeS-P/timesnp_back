@@ -37,7 +37,7 @@ public class DiasLibres {
     @Column(name = "dia", nullable = true)
     private Dias dia;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor_has_servicio", nullable = false)
     @JsonIgnore

@@ -44,7 +44,7 @@ public class ProveedorHasServicio {
     @JoinColumn(name = "id_tipo_precio", nullable = false)
     private TipoPrecio tipoPrecio;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_categoria_servicio", nullable = false)
     @JsonIgnore

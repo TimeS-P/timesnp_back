@@ -40,12 +40,12 @@ public class Reporte {
     @Column(name = "fecha", nullable = true)
     private Date fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_perfil", nullable = true)
     private Perfil perfil;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_servicio_general", nullable = true)
     @JsonIgnore

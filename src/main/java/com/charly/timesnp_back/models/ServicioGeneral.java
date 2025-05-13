@@ -57,7 +57,7 @@ public class ServicioGeneral {
     @JoinColumn(name = "id_proveedor_has_servicio", nullable = true)
     private ProveedorHasServicio proveedorHasServicio;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_combo", nullable = true)
     @JsonBackReference
