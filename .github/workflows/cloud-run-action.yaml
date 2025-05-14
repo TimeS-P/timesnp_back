@@ -1,0 +1,51 @@
+
+# Workflow name
+name: cloud-run-action.yaml
+
+# Handling push event on develop
+on:
+  push:
+    branches:
+      - 'develop'
+
+# Jobs for the workflow
+jobs:
+  build:
+    # Workflow  name that appears on execution
+    name: Cloud Run Deployment
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Authenticate on GCP
+      - name: Auth
+        uses: google-github-actions/auth@v2
+        with:
+          #Uses a secret stored in the github repo
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      # Configure gcloud sdk in the runner
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Authorize docker to interact with the Artifact Registry
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      # Build docker image in the given gcp repository
+      - name: Build
+        run: |
+          docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/timesnp-images/timesnpback:latest .
+
+      - name: Deploy
+        run: |
+          gcloud run deploy timesnpback \
+            --region us-east1 \
+            --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/timesnp-images/timesnpback:latest \
+            --platform managed \
+            --allow-unauthenticated \
+            --project ${{ secrets.GCP_PROJECT_ID }}
