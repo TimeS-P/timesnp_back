@@ -1,9 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!-- 1. Incluye la configuración base de Spring Boot -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/> :contentReference[oaicite:0]{index=0}
+
+    <!-- 2. Appender JSON / Logstash -->
     <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Incluir claves de MDC: requestId, user, ip -->
+            <customFields>{"app":"${spring.application.name:-app}"}</customFields> :contentReference[oaicite:1]{index=1}
+            <includeMdcKeyName>requestId</includeMdcKeyName>
+            <includeMdcKeyName>user</includeMdcKeyName>
+            <includeMdcKeyName>ip</includeMdcKeyName>
+        </encoder>
     </appender>
+
+    <!-- 3. Appender JDBC nativo de Logback -->
+    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>org.postgresql.Driver</driverClass>
+            <url>jdbc:postgresql://ep-dry-firefly-a4culx8y-pooler.us-east-1.aws.neon.tech:5432/neondb</url>
+            <user>neondb_owner</user>
+            <password>npg_XvYr9gxUR0wt</password>
+        </connectionSource>
+    </appender> :contentReference[oaicite:2]{index=2}
+
+    <!-- 5. Configura el root logger con ambos appenders -->
     <root level="INFO">
-        <appender-ref ref="JSON"/>
+        <appender-ref ref="JSON"/>      <!-- para Prometheus/ELK --> :contentReference[oaicite:3]{index=3}
+        <appender-ref ref="DB"/>        <!-- para persistir en BD -->
     </root>
 </configuration>

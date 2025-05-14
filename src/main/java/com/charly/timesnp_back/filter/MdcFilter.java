@@ -27,15 +27,20 @@ public class MdcFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        MDC.put("requestId", UUID.randomUUID().toString());
+        MDC.put("requestId", UUID.randomUUID().toString());                     // ID único por petición
+        MDC.put("ip", request.getRemoteAddr());                                  // IP del cliente
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            MDC.put("user", auth.getName());
+        if (auth != null && auth.isAuthenticated()) {
+            MDC.put("user", auth.getName());                                     // Nombre de usuario
+        } else {
+            MDC.put("user", "anonymous");
         }
+
         try {
             filterChain.doFilter(request, response);
         } finally {
-            MDC.clear();
+            MDC.clear();                                                          // Limpiar MDC al finalizar
         }
 
     }
