@@ -107,25 +107,25 @@ jobs:
             --allow-unauthenticated \
             --project ${{ env.GCP_PROJECT_ID_DEPLOY }} \
             --set-env-vars \
-                SPRING_PROFILES_ACTIVE=${{ env.PERFIL_ACTIVO }},\
-                CLOUDINARY_API_KEY=${{ env.CLOUDINARY_API_KEY }},\
-                CLOUDINARY_API_SECRET=${{ env.CLOUDINARY_API_SECRET }},\
-                CLOUDINARY_CLOUD_NAME=${{ env.CLOUDINARY_CLOUD_NAME }},\
-                CLOUDINARY_URL=${{ env.CLOUDINARY_URL }},\
-                DATABASE_NAME=${{ env.DATABASE_NAME }},\
-                EMAIL_USERNAME=${{ env.EMAIL_USERNAME }},\
-                EMAIL_PASSWORD=${{ env.EMAIL_PASSWORD }},\
-                GCP_BUCKET_NAME=${{ env.GCP_BUCKET_NAME }},\
-                GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},\
-                GOOGLE_APPLICATION_CREDENTIALS=${{ env.GOOGLE_APPLICATION_CREDENTIALS }},\
-                HIBERNATE_FORMAT_SQL=${{ env.HIBERNATE_FORMAT_SQL }},\
-                JPA_HIBERNATE_DDL_AUTO=${{ env.JPA_HIBERNATE_DDL_AUTO }},\
-                JPA_SHOW_SQL=${{ env.JPA_SHOW_SQL }},\
-                JWT_SECRET=${{ env.JWT_SECRET }},\
-                POSTGRESQL_HOST=${{ env.POSTGRESQL_HOST }},\
-                POSTGRESQL_PORT=${{ env.POSTGRESQL_PORT }},\
-                POSTGRESQL_USER=${{ env.POSTGRESQL_USER }},\
-                POSTGRESQL_PASSWORD=${{ env.POSTGRESQL_PASSWORD }},\
-                SECURITY_USER_NAME=${{ env.SECURITY_USER_NAME }},\
-                SECURITY_USER_PASSWORD=${{ env.SECURITY_USER_PASSWORD }},\
-                SPRING_SECURITY_LOG_LEVEL=${{ env.SPRING_SECURITY_LOG_LEVEL }}
+                SPRING_PROFILES_ACTIVE="${{ env.PERFIL_ACTIVO }}",\
+                CLOUDINARY_API_KEY="${{ env.CLOUDINARY_API_KEY }}",\
+                CLOUDINARY_API_SECRET="${{ env.CLOUDINARY_API_SECRET }}",\
+                CLOUDINARY_CLOUD_NAME="${{ env.CLOUDINARY_CLOUD_NAME }}",\
+                CLOUDINARY_URL="${{ env.CLOUDINARY_URL }}",\
+                DATABASE_NAME="${{ env.DATABASE_NAME }}",\
+                EMAIL_USERNAME="${{ env.EMAIL_USERNAME }}",\
+                EMAIL_PASSWORD="${{ env.EMAIL_PASSWORD }}",\
+                GCP_BUCKET_NAME="${{ env.GCP_BUCKET_NAME }}",\
+                GCP_PROJECT_ID="${{ env.GCP_PROJECT_ID }}",\
+                GOOGLE_APPLICATION_CREDENTIALS="${{ env.GOOGLE_APPLICATION_CREDENTIALS }}",\
+                HIBERNATE_FORMAT_SQL="${{ env.HIBERNATE_FORMAT_SQL }}",\
+                JPA_HIBERNATE_DDL_AUTO="${{ env.JPA_HIBERNATE_DDL_AUTO }}",\
+                JPA_SHOW_SQL="${{ env.JPA_SHOW_SQL }}",\
+                JWT_SECRET="${{ env.JWT_SECRET }}",\
+                POSTGRESQL_HOST="${{ env.POSTGRESQL_HOST }}",\
+                POSTGRESQL_PORT="${{ env.POSTGRESQL_PORT }}",\
+                POSTGRESQL_USER="${{ env.POSTGRESQL_USER }}",\
+                POSTGRESQL_PASSWORD="${{ env.POSTGRESQL_PASSWORD }}",\
+                SECURITY_USER_NAME="${{ env.SECURITY_USER_NAME }}",\
+                SECURITY_USER_PASSWORD="${{ env.SECURITY_USER_PASSWORD }}",\
+                SPRING_SECURITY_LOG_LEVEL="${{ env.SPRING_SECURITY_LOG_LEVEL }}"
