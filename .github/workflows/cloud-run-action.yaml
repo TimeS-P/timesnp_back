@@ -67,13 +67,6 @@ jobs:
         run: |
           gcloud auth configure-docker us-east1-docker.pkg.dev
 
-      - name: Encode SA JSON to Base64
-        id: encode_sa
-        run: |
-          echo "${{ env.GOOGLE_APPLICATION_CREDENTIALS_KEYS }}" \
-            | base64 --wrap=0 \
-            > sa.json.b64
-          echo "::set-output name=SA_B64::$(cat sa.json.b64)"
 
       - name: Build Docker image
         run: |
