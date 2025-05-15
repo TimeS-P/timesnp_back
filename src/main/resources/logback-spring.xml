@@ -14,19 +14,8 @@
         </encoder>
     </appender>
 
-    <!-- 3. Appender JDBC nativo de Logback -->
-    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
-        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
-            <driverClass>org.postgresql.Driver</driverClass>
-            <url>jdbc:postgresql://ep-dry-firefly-a4culx8y-pooler.us-east-1.aws.neon.tech:5432/neondb</url>
-            <user>neondb_owner</user>
-            <password>npg_XvYr9gxUR0wt</password>
-        </connectionSource>
-    </appender> :contentReference[oaicite:2]{index=2}
-
     <!-- 5. Configura el root logger con ambos appenders -->
     <root level="INFO">
         <appender-ref ref="JSON"/>      <!-- para Prometheus/ELK --> :contentReference[oaicite:3]{index=3}
-        <appender-ref ref="DB"/>        <!-- para persistir en BD -->
     </root>
 </configuration>

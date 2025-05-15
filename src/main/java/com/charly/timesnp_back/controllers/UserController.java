@@ -157,8 +157,14 @@ public class UserController {
                     .signWith(secretKey) // Firma del token
                     .compact();
 
+        } else {
+            log.error("Error al autenticar usuario: {}", authenticationResponse);
+            // Si la autenticacion falla, retornamos un error
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponseTemplate.error("Usuario o contraseña incorrectos"));
         }
 
+        log.info("Usuario inicio sesion con el correo: {}", user.getEmail());
         return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
                 .body(ApiResponseTemplate.ok("Usuario logueado exitosamente", user));
 

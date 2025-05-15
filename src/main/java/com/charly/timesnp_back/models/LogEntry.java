@@ -15,17 +15,21 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LogEntry {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private Instant timestamp;     // Fecha/hora de la acción
-    private String level;          // INFO, ERROR, DEBUG…
-    private String logger;         // Nombre del logger
+    private Instant timestamp;
+    private String level;
+    private String logger;
     @Column(length = 4000)
-    private String message;        // Mensaje del log
-    private String user;           // Usuario (MDC)
-    private String ip;             // IP (MDC)
-    private String thread;         // Hilo de ejecución
+    private String message;
 
-    // getters/setters…
+    @Column(name = "username")             // ya no es palabra reservada
+    private String username;
+
+    @Column(name = "ip")
+    private String ip;
+
+    @Column(name = "thread")
+    private String thread;
 }
