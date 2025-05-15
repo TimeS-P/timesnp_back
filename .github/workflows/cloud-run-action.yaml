@@ -36,7 +36,7 @@ jobs:
       EMAIL_PASSWORD:            ${{ secrets.EMAIL_PASSWORD }}
       GCP_BUCKET_NAME:           ${{ secrets.GCP_BUCKET_NAME }}
       GCP_PROJECT_ID:            ${{ secrets.GCP_PROJECT_ID }}
-      GOOGLE_APPLICATION_CREDENTIALS_KEYS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_KEYS }}
+      GCP_SA_JSON_B64:           ${{ secrets.GCP_SA_JSON_B64 }}
       HIBERNATE_FORMAT_SQL:      ${{ secrets.HIBERNATE_FORMAT_SQL }}
       JPA_HIBERNATE_DDL_AUTO:    ${{ secrets.JPA_HIBERNATE_DDL_AUTO }}
       JPA_SHOW_SQL:              ${{ secrets.JPA_SHOW_SQL }}
@@ -88,7 +88,7 @@ jobs:
             --build-arg EMAIL_PASSWORD="${{ env.EMAIL_PASSWORD }}" \
             --build-arg GCP_BUCKET_NAME="${{ env.GCP_BUCKET_NAME }}" \
             --build-arg GCP_PROJECT_ID="${{ env.GCP_PROJECT_ID }}" \
-            --build-arg GOOGLE_APPLICATION_CREDENTIALS_KEYS_B64="${{ steps.encode_sa.outputs.SA_B64 }}" \
+            --build-arg GCP_SA_JSON_B64="${{ env.GCP_SA_JSON_B64 }}" \
             --build-arg HIBERNATE_FORMAT_SQL="${{ env.HIBERNATE_FORMAT_SQL }}" \
             --build-arg JPA_HIBERNATE_DDL_AUTO="${{ env.JPA_HIBERNATE_DDL_AUTO }}" \
             --build-arg JPA_SHOW_SQL="${{ env.JPA_SHOW_SQL }}" \
@@ -124,7 +124,7 @@ jobs:
             --set-env-vars EMAIL_PASSWORD="${{ env.EMAIL_PASSWORD }}" \
             --set-env-vars GCP_BUCKET_NAME="${{ env.GCP_BUCKET_NAME }}" \
             --set-env-vars GCP_PROJECT_ID="${{ env.GCP_PROJECT_ID }}" \
-            --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=file:/app/key.json
+            --set-env-vars GCP_SA_JSON_B64="${{ env.GCP_SA_JSON_B64 }}" \
             --set-env-vars HIBERNATE_FORMAT_SQL="${{ env.HIBERNATE_FORMAT_SQL }}" \
             --set-env-vars JPA_HIBERNATE_DDL_AUTO="${{ env.JPA_HIBERNATE_DDL_AUTO }}" \
             --set-env-vars JPA_SHOW_SQL="${{ env.JPA_SHOW_SQL }}" \
