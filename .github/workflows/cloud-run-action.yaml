@@ -91,6 +91,10 @@ jobs:
             --build-arg SPRING_SECURITY_LOG_LEVEL="${{ env.SPRING_SECURITY_LOG_LEVEL }}" \
             -t us-east1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/timesnp-images/timesnpback:latest .
 
+      - name: Push Docker image
+        run: |
+          docker push us-east1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/timesnp-images/timesnpback:latest
+
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy timesnpback \
