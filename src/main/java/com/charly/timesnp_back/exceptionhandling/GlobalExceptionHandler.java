@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JsonMappingException.class)
     public ResponseEntity<ApiResponseTemplate<Object>> handleJsonMappingException(JsonMappingException ex) {
         // Loguear el error completo en los logs del servidor
-        logger.error("Error al mapear JSON", ex);
+        logger.error("Mapping JSON Error: {}", ex.getMessage(), ex);
 
         // Responder con un mensaje amigable y no exponer el stack trace
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -28,7 +28,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ApiResponseTemplate<String>> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
-        // Puedes definir el código de estado HTTP y un mensaje amigable
+
+        // Loguear el error completo en los logs del servidor
+        logger.error("Load Size Error: {}", ex.getMessage(), ex);
+
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(ApiResponseTemplate.error("El tamaño del archivo excede el máximo permitidod de 10MB."));
     }
@@ -37,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseTemplate<String>> handleException(Exception ex) {
         // Loguear el error completo en los logs del servidor
-        logger.error("Error interno del servidor", ex);
+        logger.error("Internal server error: {}", ex.getMessage(), ex);
 
         // Responder con un mensaje amigable y no exponer el stack trace
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
