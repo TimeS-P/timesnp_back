@@ -1,6 +1,8 @@
 
 # DOCKER FILE MULTISTAGE
-
+#------------------------------------------------
+# STAGE 1
+#------------------------------------------------
 # Build the image
 FROM maven:3.6.3-openjdk-17 AS build
 
@@ -22,7 +24,7 @@ ARG EMAIL_USERNAME
 ARG EMAIL_PASSWORD
 ARG GCP_BUCKET_NAME
 ARG GCP_PROJECT_ID
-ARG GOOGLE_APPLICATION_CREDENTIALS
+ARG GOOGLE_APPLICATION_CREDENTIALS_KEYS
 ARG HIBERNATE_FORMAT_SQL
 ARG JPA_HIBERNATE_DDL_AUTO
 ARG JPA_SHOW_SQL
@@ -40,13 +42,16 @@ RUN mvn clean package -DskipTests
 
 # -----------------------------------------------
 # STAGE 2
+#------------------------------------------------
 FROM azul/zulu-openjdk:17.0.13-jre
 
 # Set working dir
 WORKDIR /app
 
-# Copy jar file from the previous build stage
-COPY --from=build /app/target/*.jar app.jar
+ARG GOOGLE_APPLICATION_CREDENTIALS_KEYS
+
+# Create the key.json file
+RUN echo "${GOOGLE_APPLICATION_CREDENTIALS_KEYS}" > /app/key.json
 
 # Convertimos cada ARG en ENV para el contenedor
 ENV PERFIL_ACTIVO=${PERFIL_ACTIVO} \
@@ -59,7 +64,7 @@ ENV PERFIL_ACTIVO=${PERFIL_ACTIVO} \
     EMAIL_PASSWORD=${EMAIL_PASSWORD} \
     GCP_BUCKET_NAME=${GCP_BUCKET_NAME} \
     GCP_PROJECT_ID=${GCP_PROJECT_ID} \
-    GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS} \
+    GOOGLE_APPLICATION_CREDENTIALS=file:/app/key.json \
     HIBERNATE_FORMAT_SQL=${HIBERNATE_FORMAT_SQL} \
     JPA_HIBERNATE_DDL_AUTO=${JPA_HIBERNATE_DDL_AUTO} \
     JPA_SHOW_SQL=${JPA_SHOW_SQL} \
@@ -71,6 +76,9 @@ ENV PERFIL_ACTIVO=${PERFIL_ACTIVO} \
     SECURITY_USER_NAME=${SECURITY_USER_NAME} \
     SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD} \
     SPRING_SECURITY_LOG_LEVEL=${SPRING_SECURITY_LOG_LEVEL}
+
+# Copy jar file from the previous build stage
+COPY --from=build /app/target/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
