@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 1. Incluye la configuración base de Spring Boot -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/> :contentReference[oaicite:0]{index=0}
+
+    <!-- 2. Appender JSON / Logstash -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Incluir claves de MDC: requestId, user, ip -->
+            <customFields>{"app":"${spring.application.name:-app}"}</customFields> :contentReference[oaicite:1]{index=1}
+            <includeMdcKeyName>requestId</includeMdcKeyName>
+            <includeMdcKeyName>user</includeMdcKeyName>
+            <includeMdcKeyName>ip</includeMdcKeyName>
+        </encoder>
+    </appender>
+
+    <!-- 5. Configura el root logger con ambos appenders -->
+    <root level="INFO">
+        <appender-ref ref="JSON"/>      <!-- para Prometheus/ELK --> :contentReference[oaicite:3]{index=3}
+    </root>
+</configuration>

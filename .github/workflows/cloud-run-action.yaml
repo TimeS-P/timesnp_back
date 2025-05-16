@@ -1,0 +1,131 @@
+# Workflow name
+name: cloud-run-action.yaml
+
+# Handling push event on develop
+#on:
+#  push:
+#    branches:
+#      - 'develop'
+#      - 'main'
+on:
+  pull_request:
+    branches:
+      - 'develop'
+      - 'main'
+
+# Variables no sensibles (visibles en la UI)
+env:
+  PERFIL_ACTIVO: prod
+
+jobs:
+  build:
+    name: Cloud Run Deployment
+    runs-on: ubuntu-latest
+
+    # Aplica las reglas y secrets del Environment "prod"
+    environment: prod
+
+    # Exponer todos los SECRETs definidos en ese Environment
+    env:
+      CLOUDINARY_API_KEY:        ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET:     ${{ secrets.CLOUDINARY_API_SECRET }}
+      CLOUDINARY_CLOUD_NAME:     ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_URL:            ${{ secrets.CLOUDINARY_URL }}
+      DATABASE_NAME:             ${{ secrets.DATABASE_NAME }}
+      EMAIL_USERNAME:            ${{ secrets.EMAIL_USERNAME }}
+      EMAIL_PASSWORD:            ${{ secrets.EMAIL_PASSWORD }}
+      GCP_BUCKET_NAME:           ${{ secrets.GCP_BUCKET_NAME }}
+      GCP_PROJECT_ID:            ${{ secrets.GCP_PROJECT_ID }}
+      GCP_SA_JSON_B64:           ${{ secrets.GCP_SA_JSON_B64 }}
+      HIBERNATE_FORMAT_SQL:      ${{ secrets.HIBERNATE_FORMAT_SQL }}
+      JPA_HIBERNATE_DDL_AUTO:    ${{ secrets.JPA_HIBERNATE_DDL_AUTO }}
+      JPA_SHOW_SQL:              ${{ secrets.JPA_SHOW_SQL }}
+      JWT_SECRET:                ${{ secrets.JWT_SECRET }}
+      POSTGRESQL_HOST:           ${{ secrets.POSTGRESQL_HOST }}
+      POSTGRESQL_PORT:           ${{ secrets.POSTGRESQL_PORT }}
+      POSTGRESQL_USER:           ${{ secrets.POSTGRESQL_USER }}
+      POSTGRESQL_PASSWORD:       ${{ secrets.POSTGRESQL_PASSWORD }}
+      SECURITY_USER_NAME:        ${{ secrets.SECURITY_USER_NAME }}
+      SECURITY_USER_PASSWORD:    ${{ secrets.SECURITY_USER_PASSWORD }}
+      SPRING_SECURITY_LOG_LEVEL: ${{ secrets.SPRING_SECURITY_LOG_LEVEL }}
+      GCP_PROJECT_ID_DEPLOY:     ${{ secrets.GCP_PROJECT_ID_DEPLOY }}
+      GOOGLE_APPLICATION_CREDENTIALS_DEPLOY: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DEPLOY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Auth GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ env.GOOGLE_APPLICATION_CREDENTIALS_DEPLOY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg SPRING_PROFILES_ACTIVE="${{ env.PERFIL_ACTIVO }}" \
+            --build-arg CLOUDINARY_API_KEY="${{ env.CLOUDINARY_API_KEY }}" \
+            --build-arg CLOUDINARY_API_SECRET="${{ env.CLOUDINARY_API_SECRET }}" \
+            --build-arg CLOUDINARY_CLOUD_NAME="${{ env.CLOUDINARY_CLOUD_NAME }}" \
+            --build-arg CLOUDINARY_URL="${{ env.CLOUDINARY_URL }}" \
+            --build-arg DATABASE_NAME="${{ env.DATABASE_NAME }}" \
+            --build-arg EMAIL_USERNAME="${{ env.EMAIL_USERNAME }}" \
+            --build-arg EMAIL_PASSWORD="${{ env.EMAIL_PASSWORD }}" \
+            --build-arg GCP_BUCKET_NAME="${{ env.GCP_BUCKET_NAME }}" \
+            --build-arg GCP_PROJECT_ID="${{ env.GCP_PROJECT_ID }}" \
+            --build-arg GCP_SA_JSON_B64="${{ env.GCP_SA_JSON_B64 }}" \
+            --build-arg HIBERNATE_FORMAT_SQL="${{ env.HIBERNATE_FORMAT_SQL }}" \
+            --build-arg JPA_HIBERNATE_DDL_AUTO="${{ env.JPA_HIBERNATE_DDL_AUTO }}" \
+            --build-arg JPA_SHOW_SQL="${{ env.JPA_SHOW_SQL }}" \
+            --build-arg JWT_SECRET="${{ env.JWT_SECRET }}" \
+            --build-arg POSTGRESQL_HOST="${{ env.POSTGRESQL_HOST }}" \
+            --build-arg POSTGRESQL_PORT="${{ env.POSTGRESQL_PORT }}" \
+            --build-arg POSTGRESQL_USER="${{ env.POSTGRESQL_USER }}" \
+            --build-arg POSTGRESQL_PASSWORD="${{ env.POSTGRESQL_PASSWORD }}" \
+            --build-arg SECURITY_USER_NAME="${{ env.SECURITY_USER_NAME }}" \
+            --build-arg SECURITY_USER_PASSWORD="${{ env.SECURITY_USER_PASSWORD }}" \
+            --build-arg SPRING_SECURITY_LOG_LEVEL="${{ env.SPRING_SECURITY_LOG_LEVEL }}" \
+            -t us-east1-docker.pkg.dev/${{ env.GCP_PROJECT_ID_DEPLOY }}/timesnp-images/timesnpback:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push us-east1-docker.pkg.dev/${{ env.GCP_PROJECT_ID_DEPLOY }}/timesnp-images/timesnpback:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy timesnpback \
+            --region us-east1 \
+            --image us-east1-docker.pkg.dev/${{ env.GCP_PROJECT_ID_DEPLOY }}/timesnp-images/timesnpback:latest \
+            --platform managed \
+            --allow-unauthenticated \
+            --project ${{ env.GCP_PROJECT_ID_DEPLOY }} \
+            --set-env-vars SPRING_PROFILES_ACTIVE="${{ env.PERFIL_ACTIVO }}" \
+            --set-env-vars CLOUDINARY_API_KEY="${{ env.CLOUDINARY_API_KEY }}" \
+            --set-env-vars CLOUDINARY_API_SECRET="${{ env.CLOUDINARY_API_SECRET }}" \
+            --set-env-vars CLOUDINARY_CLOUD_NAME="${{ env.CLOUDINARY_CLOUD_NAME }}" \
+            --set-env-vars CLOUDINARY_URL="${{ env.CLOUDINARY_URL }}" \
+            --set-env-vars DATABASE_NAME="${{ env.DATABASE_NAME }}" \
+            --set-env-vars EMAIL_USERNAME="${{ env.EMAIL_USERNAME }}" \
+            --set-env-vars EMAIL_PASSWORD="${{ env.EMAIL_PASSWORD }}" \
+            --set-env-vars GCP_BUCKET_NAME="${{ env.GCP_BUCKET_NAME }}" \
+            --set-env-vars GCP_PROJECT_ID="${{ env.GCP_PROJECT_ID }}" \
+            --set-env-vars GCP_SA_JSON_B64="${{ env.GCP_SA_JSON_B64 }}" \
+            --set-env-vars HIBERNATE_FORMAT_SQL="${{ env.HIBERNATE_FORMAT_SQL }}" \
+            --set-env-vars JPA_HIBERNATE_DDL_AUTO="${{ env.JPA_HIBERNATE_DDL_AUTO }}" \
+            --set-env-vars JPA_SHOW_SQL="${{ env.JPA_SHOW_SQL }}" \
+            --set-env-vars JWT_SECRET="${{ env.JWT_SECRET }}" \
+            --set-env-vars POSTGRESQL_HOST="${{ env.POSTGRESQL_HOST }}" \
+            --set-env-vars POSTGRESQL_PORT="${{ env.POSTGRESQL_PORT }}" \
+            --set-env-vars POSTGRESQL_USER="${{ env.POSTGRESQL_USER }}" \
+            --set-env-vars POSTGRESQL_PASSWORD="${{ env.POSTGRESQL_PASSWORD }}" \
+            --set-env-vars SECURITY_USER_NAME="${{ env.SECURITY_USER_NAME }}" \
+            --set-env-vars SECURITY_USER_PASSWORD="${{ env.SECURITY_USER_PASSWORD }}" \
+            --set-env-vars SPRING_SECURITY_LOG_LEVEL="${{ env.SPRING_SECURITY_LOG_LEVEL }}"
