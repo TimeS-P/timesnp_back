@@ -144,6 +144,11 @@ public class ProjectSecurityConfig {
                         "/api/servicios/servicio",
                         "/api/categorias/obtenerCategoriasServicios"
                 ).permitAll()
+                .requestMatchers(
+                        "/actuator/health",
+                        "/actuator/info",
+                        "/actuator/prometheus"
+                ).permitAll()
         );
 
         //http.formLogin(withDefaults());
