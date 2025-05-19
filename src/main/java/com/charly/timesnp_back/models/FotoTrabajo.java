@@ -34,10 +34,14 @@ public class FotoTrabajo {
     @Column(name = "url_foto", nullable = true)
     private String url_foto;
 
+    @Column(name = "id_foto", nullable = true)
+    private String id_foto;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_servicio_general", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private ServicioGeneral servicioGeneral;
 
 

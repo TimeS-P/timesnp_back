@@ -51,6 +51,10 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario")
     private List<Domicilio> domicilios;
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Chat> chats;
+
     @JsonIgnore
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;

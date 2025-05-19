@@ -53,9 +53,18 @@ public class Perfil {
     @Column(name = "puntos", nullable = true, columnDefinition = "int default 0")
     private int puntos;
 
-    @Column(name = "referido", nullable = true, length = 300)
-    private String referido;
-    
+    @Column(name = "codigo_compartir", nullable = true, length = 300)
+    private String codigoCompartir;
+
+    @Column(name = "fecha_nacimiento", nullable = true)
+    private Date fechaNacimiento;
+
+    @Column(name = "genero", nullable = true, length = 30)
+    private String genero;
+
+    @Column(name = "descripcion", nullable = true, length = 300)
+    private String descripcion;
+
     @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
@@ -80,23 +89,8 @@ public class Perfil {
     @JsonIgnore
     private List<Mensaje> mensajesReceptor;
 
-    @OneToMany(mappedBy = "remitente")
-    @JsonIgnore
-    private List<Mensaje> mensajesEmisor;
 
-    @Column(name = "codigo_compartir", nullable = true, length = 300)
-    private String codigoCompartir;
-
-    @Column(name = "fecha_nacimiento", nullable = true)
-    private Date fechaNacimiento;
-
-    @Column(name = "genero", nullable = true, length = 1)
-    private String genero;
-
-    @Column(name = "descripcion", nullable = true, length = 300)
-    private String descripcion;
-
-    public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String referido) {
+    public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String codigoCompartir, String genero, String descripcion) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -104,7 +98,9 @@ public class Perfil {
         this.foto = foto;
         this.usuario = usuario;
         this.puntos = puntos;
-        this.referido = referido;
+        this.codigoCompartir = codigoCompartir;
+        this.genero = genero;
+        this.descripcion = descripcion;
     }
 
     public Perfil(String nombre, Usuario usuario, String codigoCompartir) {

@@ -31,9 +31,6 @@ public class CategoriaServicio {
     @Column(name = "nombre", nullable = true, length = 100)
     private String nombre;
 
-    @Column(name = "descripcion", nullable = true, length = 650)
-    private String descripcion;
-
     @Column(name = "icono", nullable = true, length = 300)
     private String icono;
 
@@ -41,9 +38,8 @@ public class CategoriaServicio {
     @JsonIgnore
     private List<ProveedorHasServicio> proveedorHasServicios;
 
-    public CategoriaServicio(String nombre, String descripcion, String icono) {
+    public CategoriaServicio(String nombre, String icono) {
         this.nombre = nombre;
-        this.descripcion = descripcion;
         this.icono = icono;
     }
 

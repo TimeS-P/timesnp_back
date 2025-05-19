@@ -1,13 +1,12 @@
 package com.charly.timesnp_back.controllers;
 
+import com.charly.timesnp_back.dtos.ComboDTO;
 import com.charly.timesnp_back.models.Combo;
 import com.charly.timesnp_back.models.Rol;
 import com.charly.timesnp_back.services.ComboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +35,37 @@ public class CombosController {
             return ResponseEntity.ok(ApiResponseTemplate.ok("Roles retrieved successfully", roles));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error retrieving roles: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping(value = "/create-combo", consumes="multipart/form-data")
+    public ResponseEntity<ApiResponseTemplate<String>> createCombo(@ModelAttribute ComboDTO comboDTO) {
+        System.out.println("ComboDTO: " + comboDTO);
+        try {
+            Combo combo = comboService.createCombo(comboDTO);
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Combo created successfully", "Combo creado correctamente"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error creating combo: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/get-combos-by-proveedor")
+    public ResponseEntity<ApiResponseTemplate<List<Combo>>> getCombosByProveedor() {
+        try {
+            List<Combo> combos = comboService.getCombosByProveedor();
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Combos retrieved successfully", combos));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error retrieving combos: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/delete-combo/{id}")
+    public ResponseEntity<ApiResponseTemplate<String>> deleteCombo(@PathVariable String id) {
+        try {
+            comboService.deleteCombo(id);
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Combo deleted successfully", "Combo eliminado correctamente"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error deleting combo: " + e.getMessage()));
         }
     }
 }

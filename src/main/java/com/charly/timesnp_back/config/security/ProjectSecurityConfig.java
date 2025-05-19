@@ -110,7 +110,9 @@ public class ProjectSecurityConfig {
                         "/api/resources/upload",
                         "/api/resources/delete",
                         "/api/updateUserInfo",
-                        "/api/combo/get-roles"
+                        "/api/combo/get-roles",
+                        "/api/chat/create-chat"
+
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
@@ -132,6 +134,11 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
+                .requestMatchers( // RUTAS PARA PROVEEDORES
+                        "/api/combo/create-combo",
+                        "/api/combo/get-combos-by-proveedor",
+                        "/api/combo/delete-combo/{id}"
+                ).hasRole("PROVEEDOR")
                 .requestMatchers(
                         "/api/testing/public",
                         "/api/auth/**",
@@ -141,7 +148,12 @@ public class ProjectSecurityConfig {
                         "/invalidSession",
                         "/api/servicios/serviciosCategoria",
                         "/api/servicios/servicio",
-                        "api/combo/get-combos"
+                        "api/combo/get-combos",
+                        "/api/chat/get-servicio-general",
+                        "/chat/{chatId}",
+                        "/topic/chat/{chatId}",
+                        "/ws-chat"
+
 
                 ).permitAll()
         );

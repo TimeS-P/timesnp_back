@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -47,25 +48,19 @@ public class Mensaje {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn Perfil remitente;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_servicio_general", nullable = true)
-    @JsonIgnore
-    private ServicioGeneral servicioGeneral;
+    @JoinColumn(name = "id_chat", nullable = true)
+    @JsonBackReference
+    private Chat chat;
 
     @PrePersist
     protected void onCreate() {
         this.fecha = Date.valueOf(LocalDate.now());
     }
     
-	public Mensaje(String mensaje, Date fecha, Perfil emisor, Perfil remitente, ServicioGeneral servicioGeneral) {
+	public Mensaje(String mensaje, Date fecha, Perfil emisor) {
 		this.mensaje = mensaje;
 		this.fecha = fecha;
 		this.emisor = emisor;
-		this.remitente = remitente;
-		this.servicioGeneral = servicioGeneral;
 	}
 
 }
