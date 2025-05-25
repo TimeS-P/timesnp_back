@@ -89,7 +89,6 @@ public class Perfil {
     @JsonIgnore
     private List<Mensaje> mensajesReceptor;
 
-
     public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String codigoCompartir, String genero, String descripcion) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;

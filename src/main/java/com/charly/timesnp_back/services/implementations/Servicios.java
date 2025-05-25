@@ -30,7 +30,7 @@ public class Servicios implements IServicios {
             case "ALF":
                 return servicesProveedorRepository.findByCategoriaOrAlf(obtenerServiciosDTO.getIdCategoria());
             default:
-                return null;
+                return Optional.of(servicesProveedorRepository.findAll());
         }
     }
 

@@ -46,6 +46,7 @@ public class ProjectSecurityConfig {
     private final TimeSnpAuthenticationEntryPoint timeSnpAuthenticationEntryPoint;
     private final PerfilServiceImpl perfilService;
     private final UsuarioRepository usuarioRepository;
+    private final MdcFilter mdcFilter;
 
     private final Environment env;
 
@@ -97,6 +98,7 @@ public class ProjectSecurityConfig {
                 .addFilterAfter(new JWTTokenGeneratorFilter(perfilService), BasicAuthenticationFilter.class) // Se genera el token JWT después de la autenticación básica al hacer login
                 .addFilterBefore(new JWTTokenValidatorFilter(env, usuarioRepository), BasicAuthenticationFilter.class) // Se valida el token JWT antes de la autenticación básica cada vez que se hace una petición
                 .addFilterBefore(rateLimitingFilter, JWTTokenValidatorFilter.class) // Se valida el rate limiting antes de la validación del token JWT y la autenticación básica
+                .addFilterAfter(mdcFilter, BasicAuthenticationFilter.class) // Se añade el filtro MDC para el manejo de logs
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// ONLY HTTP
                 //.csrf(AbstractHttpConfigurer::disable); // Desactivamos la protección CSRF (Cross-Site Request Forgery) temporalmente
 
@@ -156,8 +158,7 @@ public class ProjectSecurityConfig {
                         "/chat/**",
                         "/topic/chat/**",
                         "/ws-chat/**"
-
-
+                        "/api/categorias/obtenerCategoriasServicios"
                 ).permitAll()
         );
 
