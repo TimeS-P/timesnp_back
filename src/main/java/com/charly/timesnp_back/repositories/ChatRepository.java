@@ -18,4 +18,15 @@ public interface ChatRepository extends JpaRepository<Chat, UUID> {
     //Obtener chat con un servicio general y un usuario
     @Query("SELECT c FROM chat c WHERE c.servicioGeneral.id = :idServicioGeneral AND c.usuario.id = :idUsuario")
     Optional<Chat> findByServicioGeneralIdAndUsuarioId(UUID idServicioGeneral, UUID idUsuario);
+
+    //Obtener chats de un usuario
+    @Query("SELECT c FROM chat c WHERE c.usuario.id = :idUsuario")
+    List<Chat> findByUsuarioId(UUID idUsuario);
+
+    //Obtener chats de un proveedor
+    @Query("SELECT c FROM chat c WHERE c.servicioGeneral.combo.proveedor.id = :idProveedor")
+    List<Chat> findByProveedorIdCombo(UUID idProveedor);
+
+    @Query("SELECT c FROM chat c WHERE c.servicioGeneral.proveedorHasServicio.proveedor.id = :idProveedor")
+    List<Chat> findByProveedorIdServicio(UUID idProveedor);
 }

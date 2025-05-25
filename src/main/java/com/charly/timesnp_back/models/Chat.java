@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name="chat")
 @Table(name = "chat")
@@ -21,19 +22,17 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private String id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_servicio_general", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     @ToString.Exclude
     private ServicioGeneral servicioGeneral;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     @ToString.Exclude
     private Usuario usuario;
 

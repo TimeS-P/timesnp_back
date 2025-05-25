@@ -111,8 +111,10 @@ public class ProjectSecurityConfig {
                         "/api/resources/delete",
                         "/api/updateUserInfo",
                         "/api/combo/get-roles",
-                        "/api/chat/create-chat"
-
+                        "/api/chat/create-chat",
+                        "/api/usuario/getId",
+                        "/api/chat/get-mensajes",
+                        "/api/chat/get-chats-usuario"
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
@@ -137,7 +139,8 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS PARA PROVEEDORES
                         "/api/combo/create-combo",
                         "/api/combo/get-combos-by-proveedor",
-                        "/api/combo/delete-combo/{id}"
+                        "/api/combo/delete-combo/{id}",
+                        "/api/chat/get-chats-proveedor"
                 ).hasRole("PROVEEDOR")
                 .requestMatchers(
                         "/api/testing/public",
@@ -150,9 +153,9 @@ public class ProjectSecurityConfig {
                         "/api/servicios/servicio",
                         "api/combo/get-combos",
                         "/api/chat/get-servicio-general",
-                        "/chat/{chatId}",
-                        "/topic/chat/{chatId}",
-                        "/ws-chat"
+                        "/chat/**",
+                        "/topic/chat/**",
+                        "/ws-chat/**"
 
 
                 ).permitAll()
@@ -163,7 +166,6 @@ public class ProjectSecurityConfig {
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(timeSnpAuthenticationEntryPoint));
         // GLOGAL CONFIGURATION FOR EXCEPTION HANDLING
         http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));
-
         return http.build();
     }
 

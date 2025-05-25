@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class MessageDTO {
-    private String message;
-    private String ServicioGeneral;
+    private String mensaje;
+    private String emisor;
+    private String fecha;
+    private String chatId;
 }
