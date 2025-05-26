@@ -2,6 +2,7 @@ package com.charly.timesnp_back.exceptionhandling;
 
 import com.charly.timesnp_back.controllers.ApiResponseTemplate;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -40,7 +42,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseTemplate<String>> handleException(Exception ex) {
         // Loguear el error completo en los logs del servidor
-        logger.error("Internal server error: {}", ex.getMessage(), ex);
+        log.error("Internal server error: {}", ex.getMessage(), ex);
 
         // Responder con un mensaje amigable y no exponer el stack trace
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

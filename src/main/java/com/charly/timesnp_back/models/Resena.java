@@ -2,6 +2,7 @@ package com.charly.timesnp_back.models;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -24,7 +25,7 @@ import jakarta.persistence.Table;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "contratacion")
 public class Resena {
 
     @Id
@@ -42,6 +43,7 @@ public class Resena {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_contratacion", nullable = false)
     @JsonIgnore
+    @JsonBackReference
     private Contratacion contratacion;
 
     public Resena(int calificacion, String comentario, Contratacion contratacion) {

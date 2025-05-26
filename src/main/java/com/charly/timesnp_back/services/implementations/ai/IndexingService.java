@@ -1,4 +1,4 @@
-package com.charly.timesnp_back.services.implementations;
+package com.charly.timesnp_back.services.implementations.ai;
 
 
 import com.charly.timesnp_back.models.ServicioGeneral;
@@ -26,12 +26,12 @@ public class IndexingService {
     private String indexEndpointId;
 
     private final IndexServiceClient indexServiceClient;
-    private final EmbeddingGeneratorService embeddingGenerator;
+    private final RestEmbeddingService restEmbeddingService;
 
     public void indexServicio(ServicioGeneral servicio) {
         //  Genera el embedding del servicio
         String text = servicio.getNombre() + " " + servicio.getDescripcion();
-        List<Float> vector = embeddingGenerator.generateEmbedding(text);
+        List<Float> vector = restEmbeddingService.generateEmbedding(text);
 
         // Construyes tu lista de restricciones así:
         List<IndexDatapoint.Restriction> restrictions = List.of(
