@@ -11,4 +11,5 @@ public interface IEmailService  {
     public void sendForgotPassword(String email, String link) throws  MessagingException;
     public void sendVerificationConfirmation(String email, String nombre) throws MessagingException;
     public void sendVerificationDenied(VerificationDeniedDTO verificationDeniedDTO) throws MessagingException;
+    public void sendContratacion(EmailDTO emailDTO) throws MessagingException;
 }

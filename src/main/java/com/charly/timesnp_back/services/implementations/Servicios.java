@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.charly.timesnp_back.dtos.ServicioGeneralDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,11 @@ public class Servicios implements IServicios {
     @Override
     public ServicioGeneral obtenerServicioPorId(UUID id) {
         return servicesProveedorRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public ServicioGeneral crearServicio(ServicioGeneralDTO servicioDTO) {
+        return null;
     }
 
 }

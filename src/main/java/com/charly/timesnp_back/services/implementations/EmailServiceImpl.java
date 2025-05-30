@@ -104,4 +104,41 @@ public class EmailServiceImpl implements IEmailService {
             throw new MessagingException("Error al enviar el correo: "+e.getMessage());
         }
     }
+
+    @Override
+    public void sendContratacion(EmailDTO emailDTO) throws MessagingException {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(emailDTO.getAddressee());
+            helper.setSubject("Confirmación de Contratación - TimeSP");
+
+            Context context = new Context();
+
+            // Variables básicas del EmailDTO
+            context.setVariable("name", emailDTO.getName());
+            context.setVariable("title", emailDTO.getTitle());
+            context.setVariable("message", emailDTO.getMessage());
+
+            // Variables específicas para contratación (puedes agregar más campos al EmailDTO si es necesario)
+            context.setVariable("tipoServicio", emailDTO.getTipoServicio() != null ? emailDTO.getTipoServicio() : "Servicio Profesional");
+            context.setVariable("categoria", emailDTO.getCategoria() != null ? emailDTO.getCategoria() : "General");
+            context.setVariable("totalPagado", emailDTO.getTotalPagado() != null ? emailDTO.getTotalPagado() : "0.00");
+            context.setVariable("fechaContratacion", emailDTO.getFechaContratacion() != null ? emailDTO.getFechaContratacion() : java.time.LocalDate.now().toString());
+            context.setVariable("duracion", emailDTO.getDuracion() != null ? emailDTO.getDuracion() : "Por definir");
+
+            // Procesar la plantilla
+            String htmlContent = templateEngine.process("sendContratacion", context);
+            helper.setText(htmlContent, true);
+
+            // Enviar correo
+            javaMailSender.send(message);
+
+        } catch (MessagingException e) {
+            throw new MessagingException("Error al enviar el correo de contratación: " + e.getMessage());
+        }
+    }
+
+
 }

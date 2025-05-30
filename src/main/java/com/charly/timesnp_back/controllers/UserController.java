@@ -143,6 +143,7 @@ public class UserController {
                     // Claim para saber si el usuario esta verificado
                     .claim("isVerified", perfil != null && perfil.getVerificacion() != null)
                     .claim("puntos", perfil != null ? perfil.getPuntos() : 0)
+                    .claim("id_perfil", perfil != null ? perfil.getId() : null)
                     .issuedAt(new Date()) // Fecha de emisión
                     // Expiration time de 8 horas
                     .expiration(new Date(new Date().getTime() + 1000 * 60 * 60 * 8))
