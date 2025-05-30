@@ -87,7 +87,9 @@ public class ProjectSecurityConfig {
                                 .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
                                         "/api/auth/register",
                                         "/api/auth/loginSecure",
-                                        "/api/v1/recommendations/update/**"
+                                        "/api/v1/recommendations/update/**",
+                                        "/api/contratacion/crearContratacion",
+                                        "/api/contratacion/sendContratacion"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
@@ -158,7 +160,9 @@ public class ProjectSecurityConfig {
                         "/ws-chat/**",
                         "/api/categorias/obtenerCategoriasServicios",
                         "/api/v1/recommendations/**",
-                        "/api/perfil/existsByCode"
+                        "/api/perfil/existsByCode",
+                        "/api/contratacion/crearContratacion",
+                        "/api/contratacion/sendContratacion"
                 ).permitAll()
         );
 

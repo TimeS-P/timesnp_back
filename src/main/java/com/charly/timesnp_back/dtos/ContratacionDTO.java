@@ -5,8 +5,7 @@ import com.charly.timesnp_back.models.ServicioGeneral;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Optional;
+import java.sql.Date;
 import java.util.UUID;
 
 @Getter
@@ -15,18 +14,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContratacionDTO {
-    private Optional<UUID> id = Optional.empty();
-    private Optional<Date> fechaInicio = Optional.empty();
-    private Optional<Date> fechaFin = Optional.empty();
-    private Optional<BigDecimal> total = Optional.empty();
-    private Optional<Perfil> perfil = Optional.empty();
-    private Optional<ServicioGeneral> servicioGeneral = Optional.empty();
+    private Date fechaInicio;
+    private Date fechaFin;
+    private BigDecimal total;
+    private Integer cantidad;
+    private UUID perfilId;  // Solo el id
+    private UUID servicioGeneralId; // Solo el id
 
-    public ContratacionDTO(Date fechaInicio, Date fechaFin, BigDecimal total, Perfil perfil, ServicioGeneral servicioGeneral) {
-        this.fechaInicio = Optional.ofNullable(fechaInicio);
-        this.fechaFin = Optional.ofNullable(fechaFin);
-        this.total = Optional.ofNullable(total);
-        this.perfil = Optional.ofNullable(perfil);
-        this.servicioGeneral = Optional.ofNullable(servicioGeneral);
-    }
+    private String codigoCompartir;
+    private Boolean usePoints;
 }
