@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -74,7 +75,7 @@ public class ServicioGeneral {
     private List<FotoTrabajo> fotos;
 
     @OneToMany(mappedBy = "servicioGeneral")
-    @JsonIgnore
+    @JsonManagedReference
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "servicioGeneral")

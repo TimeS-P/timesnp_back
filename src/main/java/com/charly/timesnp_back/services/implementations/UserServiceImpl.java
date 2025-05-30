@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +78,26 @@ public class UserServiceImpl implements IUserService {
         }
 
         return newUser;
+    }
+
+    /**
+     * @param usuarioId       ID del usuario a actualizar.
+     * @param estadoBloqueado Estado de bloqueo a establecer.
+     * @return
+     */
+    @Override
+    public Usuario updateUserBlockStatus(UUID usuarioId, boolean estadoBloqueado) {
+
+        Optional<Usuario> optionalUsuario = this.usuarioRepository.findById(usuarioId);
+
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+            usuario.setAccountNonLocked(estadoBloqueado);
+            return this.usuarioRepository.save(usuario);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
     }
 
     public Usuario getUserByEmail(String email) {

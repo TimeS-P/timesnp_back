@@ -2,12 +2,14 @@ package com.charly.timesnp_back.controllers;
 
 import com.charly.timesnp_back.models.Contratacion;
 import com.charly.timesnp_back.models.ServicioGeneral;
+import com.charly.timesnp_back.models.Usuario;
 import com.charly.timesnp_back.services.implementations.ContratacionService;
 import com.charly.timesnp_back.services.implementations.ai.IndexingService;
 import com.charly.timesnp_back.services.implementations.ai.ReccomendationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,11 +29,14 @@ public class ReccomendationController {
     private final ContratacionService contratacionService;
     private final IndexingService indexingService;
 
-    @GetMapping("/{profileId}")
+    @GetMapping
     public ResponseEntity<ApiResponseTemplate<List<ServicioGeneral>>> getRecommendations(
-            @PathVariable UUID profileId,
             @RequestParam(defaultValue = "5") int topK
     ) {
+        // Get the profile ID from the security context
+        Usuario loggedUser = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UUID profileId = loggedUser.getPerfil().getId();
+
         List<ServicioGeneral> recommendations = recService.reccomendForProfile(profileId, topK);
         return ResponseEntity.ok(new ApiResponseTemplate<>(true, "Recommendations retrieved successfully", recommendations));
     }
@@ -39,11 +44,15 @@ public class ReccomendationController {
     /**
      * Api to update the recommendations for a profile
      */
-    @PutMapping("/update/{profileId}")
+    @PutMapping("/update")
     public ResponseEntity<ApiResponseTemplate<String>> updateRecommendations(
-            @PathVariable UUID profileId
     ) {
         try {
+
+            // Get the profile ID from the security context
+            Usuario loggedUser = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UUID profileId = loggedUser.getPerfil().getId();
+
             List< Contratacion> contrataciones = contratacionService.getContrataciones(profileId);
 
             if (contrataciones.isEmpty()) {

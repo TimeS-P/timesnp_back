@@ -10,7 +10,6 @@ name: cloud-run-action.yaml
 on:
   pull_request:
     branches:
-      - 'develop'
       - 'main'
 
 # Variables no sensibles (visibles en la UI)

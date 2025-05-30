@@ -72,7 +72,7 @@ public class Perfil {
     private Usuario usuario;
 
     @OneToOne(mappedBy = "perfil")
-    @JsonIgnore
+    @JsonBackReference
     private Verificacion verificacion;
 
     @OneToOne(mappedBy = "perfil")
