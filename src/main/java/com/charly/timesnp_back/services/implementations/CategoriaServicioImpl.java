@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -17,5 +18,11 @@ public class CategoriaServicioImpl implements ICategoriaServicioService {
     @Override
     public List<CategoriaServicio> obtenerCategoriasServicios() {
         return categoriaServicioRepository.findAll();
+    }
+
+    @Override
+    public CategoriaServicio obtenerCategoriaServicioPorId(UUID id) {
+        return categoriaServicioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria de servicio no encontrada con id: " + id));
     }
 }

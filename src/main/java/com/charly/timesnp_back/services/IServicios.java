@@ -10,5 +10,5 @@ import com.charly.timesnp_back.dtos.ObtenerServiciosDTO;
 public interface IServicios {
     public Optional<List<ServicioGeneral>> obtenerServicios(ObtenerServiciosDTO obtenerServiciosDTO);
     public ServicioGeneral obtenerServicioPorId(UUID id);
-    public ServicioGeneral crearServicio(ServicioGeneralDTO servicioDTO);
+    public ServicioGeneral crearServicio(ServicioGeneral servicioGeneral);
 }
