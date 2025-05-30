@@ -70,7 +70,6 @@ public class ServicioGeneral {
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "servicioGeneral")
-    @JsonIgnore
     private List<FotoTrabajo> fotos;
 
     @OneToMany(mappedBy = "servicioGeneral")
