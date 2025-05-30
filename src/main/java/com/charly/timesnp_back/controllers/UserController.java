@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -159,6 +160,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER, jwt)
                 .body(ApiResponseTemplate.ok("Usuario logueado exitosamente", user));
 
+    }
+
+    @PutMapping("/ban-status/{idUsuario}")
+    public ResponseEntity<ApiResponseTemplate<String>> banUser(
+            @PathVariable("idUsuario") UUID idUsuario,
+            @RequestParam(value = "ban", defaultValue = "true") boolean banStatus
+    ) {
+        try {
+            userService.updateUserBlockStatus(idUsuario, banStatus);
+
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Se actualizo el ban status del usuario", null));
+        } catch (Exception e) {
+            log.error("Error al banear usuario: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al banear usuario: " + e.getMessage()));
+        }
     }
 
 

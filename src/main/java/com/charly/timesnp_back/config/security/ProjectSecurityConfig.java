@@ -131,10 +131,12 @@ public class ProjectSecurityConfig {
                 ).hasAnyRole("USUARIO", "PROVEEDOR")
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
-                        "/api/send-denied-verification"
+                        "/api/send-denied-verification",
+                        "api/reportes/**"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS PARA ADMINISTRADORES
-                        "/api/testing/private/admin"
+                        "/api/testing/private/admin",
+                        "api/reportes/**"
                 ).hasRole("ADMIN")
                 .requestMatchers( // RUTAS PARA PROVEEDORES
                         "/api/combo/create-combo",
