@@ -48,4 +48,10 @@ public class ContratacionServiceImpl implements ContratacionService{
         contratacionRepository.save(contratacion);
     }
 
+    @Override
+    public Contratacion getContratacionById(UUID idContratacion) {
+        return contratacionRepository.findById(idContratacion)
+                .orElseThrow(() -> new RuntimeException("Contratación no encontrada con id: " + idContratacion));
+    }
+
 }

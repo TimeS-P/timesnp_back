@@ -14,7 +14,7 @@ public interface ReporteService {
      * @param comentario        Comentario del reporte.
      * @return El reporte creado.
      */
-    public void crearReporte(UUID idServicioGeneral, String comentario) throws Exception;
+    public void crearReporte(UUID idPerfil, UUID idServicioGeneral, String comentario) throws Exception;
 
     /**
      * Obtiene todos los reportes de un servicio general.

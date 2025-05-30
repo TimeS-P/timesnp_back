@@ -90,7 +90,10 @@ public class ProjectSecurityConfig {
                                         "/api/v1/recommendations/update/**",
                                         "/api/contratacion/crearContratacion",
                                         "/api/contratacion/sendContratacion",
-                                        "/api/servicios/crearServicio"
+                                        "/api/servicios/crearServicio",
+                                        "/api/resena/crearResena",
+                                        "/api/reportes/crearReporte"
+
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
@@ -136,12 +139,10 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
                         "/api/send-denied-verification",
-                        "api/reportes/**",
                         "/api/verificacionesadmin/**"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin",
-                        "api/reportes/**",
                         "/api/verificacionesadmin/**"
                 ).hasRole("ADMIN")
                 .requestMatchers( // RUTAS PARA PROVEEDORES
@@ -169,7 +170,10 @@ public class ProjectSecurityConfig {
                         "/api/v1/recommendations/**",
                         "/api/contratacion/crearContratacion",
                         "/api/contratacion/sendContratacion",
-                        "/api/servicios/crearServicio"
+                        "/api/servicios/crearServicio",
+                        "/api/contratacion/getContrataciones",
+                        "/api/resena/crearResena",
+                        "/api/reportes/crearReporte"
                 ).permitAll()
         );
 
