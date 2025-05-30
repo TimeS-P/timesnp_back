@@ -34,6 +34,12 @@ public class ReccomendationService {
         // 1) Obtén el historial de contrataciones
         // 1) Historial y categorías únicas
         List<Contratacion> contratos = contratacionRepository.findByPerfilId(perfilId);
+
+        if (contratos.isEmpty()) {
+            log.warn("No contracts found for profile ID: {}", perfilId);
+            return new ArrayList<>();
+        }
+
         Set<String> categorias = contratos.stream()
                 .map(Contratacion::getServicioGeneral)
                 .filter(s -> s != null && s.getProveedorHasServicio() != null && s.getProveedorHasServicio().getCategoriaServicio() != null)

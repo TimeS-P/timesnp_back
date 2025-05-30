@@ -114,7 +114,8 @@ public class ProjectSecurityConfig {
                         "/api/chat/create-chat",
                         "/api/usuario/getId",
                         "/api/chat/get-mensajes",
-                        "/api/chat/get-chats-usuario"
+                        "/api/chat/get-chats-usuario",
+                        "/api/v1/recommendations/**"
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
@@ -132,11 +133,13 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL VERIFICADOR UNICAMENTE
                         "/api/send-accept-verification",
                         "/api/send-denied-verification",
-                        "api/reportes/**"
+                        "api/reportes/**",
+                        "/api/verificacionesadmin/**"
                 ).hasRole("VERIFICADOR")
                 .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin",
-                        "api/reportes/**"
+                        "api/reportes/**",
+                        "/api/verificacionesadmin/**"
                 ).hasRole("ADMIN")
                 .requestMatchers( // RUTAS PARA PROVEEDORES
                         "/api/combo/create-combo",
@@ -159,7 +162,6 @@ public class ProjectSecurityConfig {
                         "/topic/chat/**",
                         "/ws-chat/**",
                         "/api/categorias/obtenerCategoriasServicios",
-                        "/api/v1/recommendations/**",
                         "/api/perfil/existsByCode"
                 ).permitAll()
         );
