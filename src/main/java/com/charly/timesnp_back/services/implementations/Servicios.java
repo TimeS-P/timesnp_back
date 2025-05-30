@@ -41,8 +41,12 @@ public class Servicios implements IServicios {
     }
 
     @Override
-    public ServicioGeneral crearServicio(ServicioGeneralDTO servicioDTO) {
-        return null;
+    public ServicioGeneral crearServicio(ServicioGeneral servicioGeneral) {
+        try {
+            return servicesProveedorRepository.save(servicioGeneral);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear el servicio: " + e.getMessage());
+        }
     }
 
 }

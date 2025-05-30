@@ -89,7 +89,8 @@ public class ProjectSecurityConfig {
                                         "/api/auth/loginSecure",
                                         "/api/v1/recommendations/update/**",
                                         "/api/contratacion/crearContratacion",
-                                        "/api/contratacion/sendContratacion"
+                                        "/api/contratacion/sendContratacion",
+                                        "/api/servicios/crearServicio"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
@@ -167,7 +168,8 @@ public class ProjectSecurityConfig {
                         "/api/perfil/existsByCode",
                         "/api/v1/recommendations/**",
                         "/api/contratacion/crearContratacion",
-                        "/api/contratacion/sendContratacion"
+                        "/api/contratacion/sendContratacion",
+                        "/api/servicios/crearServicio"
                 ).permitAll()
         );
 

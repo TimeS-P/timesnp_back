@@ -1,12 +1,12 @@
 package com.charly.timesnp_back.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.charly.timesnp_back.dtos.CrearServicioDTO;
+import com.charly.timesnp_back.models.*;
+import com.charly.timesnp_back.services.*;
+import org.springframework.web.bind.annotation.*;
 
 import com.charly.timesnp_back.dtos.ObtenerServiciosDTO;
 import com.charly.timesnp_back.dtos.ServicioGeneralDTO;
-import com.charly.timesnp_back.models.ServicioGeneral;
-import com.charly.timesnp_back.services.IServicios;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -24,6 +22,18 @@ public class ServiciosController {
 
     @Autowired 
     IServicios servicios;
+
+    @Autowired
+    IProveedorHasServicio iProveedorHasServicio;
+
+    @Autowired
+    ICategoriaServicioService categoriaServicioService;
+
+    @Autowired
+    IProveedor proveedorService;
+
+    @Autowired
+    ITipoPrecio tipoPrecioService;
 
     @GetMapping("/serviciosCategoria")
     public ResponseEntity<ApiResponseTemplate<List<ServicioGeneralDTO>>> getMethodName(@RequestParam UUID idCategoria, @RequestParam String filtro) {
@@ -50,6 +60,38 @@ public class ServiciosController {
         }
     }
     
-    
+    @PostMapping("/crearServicio")
+    public ResponseEntity<ApiResponseTemplate<ServicioGeneralDTO>> crearServicio(@RequestBody CrearServicioDTO dto) {
+        try {
+
+            CategoriaServicio categoria = categoriaServicioService.obtenerCategoriaServicioPorId(dto.getIdCategoria());
+            Proveedor proveedor = proveedorService.getProveedorById(dto.getIdProveedor());
+            TipoPrecio tipoPrecio = tipoPrecioService.getTipoPrecioById(dto.getIdTipoPrecio());
+
+            ProveedorHasServicio proveedorServicio = new ProveedorHasServicio();
+            proveedorServicio.setCategoriaServicio(categoria);
+            proveedorServicio.setProveedor(proveedor);
+            proveedorServicio.setCalificacion(0);
+            proveedorServicio.setTipoPrecio(tipoPrecio);
+            UUID idProveedorHasServicio = iProveedorHasServicio.saveProveedorHasServicio(proveedorServicio);
+
+            proveedorServicio = iProveedorHasServicio.getProveedorHasServicioById(idProveedorHasServicio);
+
+
+            ServicioGeneral servicioGeneral = new ServicioGeneral();
+            servicioGeneral.setPrecio(dto.getPrecio());
+            servicioGeneral.setDescripcion(dto.getDescripcion());
+            servicioGeneral.setNombre(dto.getNombre());
+            servicioGeneral.setTipoServicio(TipoServicio.SERVICIO);
+            servicioGeneral.setProveedorHasServicio(proveedorServicio);
+            servicioGeneral.setCombo(null);
+
+            servicios.crearServicio(servicioGeneral);
+
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Servicio creado correctamente", ServicioGeneralDTO.fromEntity(servicioGeneral)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error al crear el servicio: " + e.getMessage()));
+        }
+    }
 
 }
