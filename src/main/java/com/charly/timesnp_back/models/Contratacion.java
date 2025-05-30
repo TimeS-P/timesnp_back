@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -51,15 +52,18 @@ public class Contratacion {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_perfil", nullable = true)
     @JsonIgnore
+    @JsonManagedReference
     private Perfil perfil;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_servicio_general", nullable = true)
     @JsonIgnore
+    @JsonManagedReference
     private ServicioGeneral servicioGeneral;
 
     @OneToMany(mappedBy = "contratacion")
+    @JsonManagedReference
     private List<Resena> resenas;
 
     public Contratacion(Date fechaInicio, Date fechaFin, BigDecimal total, int cantidad, Perfil perfil,

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,7 +27,7 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
+@ToString(exclude = {"contrataciones"})
 @NoArgsConstructor
 public class Perfil {
 
@@ -79,6 +80,7 @@ public class Perfil {
 
     @OneToMany(mappedBy = "perfil")
     @JsonIgnore
+    @JsonBackReference
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "perfil")
