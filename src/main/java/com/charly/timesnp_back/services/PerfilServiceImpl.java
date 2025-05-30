@@ -1,9 +1,7 @@
 package com.charly.timesnp_back.services;
 
 import com.charly.timesnp_back.models.Perfil;
-import com.charly.timesnp_back.models.Usuario;
 import com.charly.timesnp_back.repositories.PerfilRepository;
-import com.charly.timesnp_back.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -80,4 +78,15 @@ public class PerfilServiceImpl implements IPerfilService {
         return perfil;
 
     }
+
+    @Override
+    public Perfil existsByCodigoCompartir(String codigoCompartir) throws Exception {
+        Perfil perfil = perfilRepository.findByCodigoCompartir(codigoCompartir).orElse(null);
+        if (perfil == null) {
+            // Lanzamos una excepción si no se encuentra el perfil
+            throw new RuntimeException("Perfil no encontrado");
+        }
+        return perfil;
+    }
+
 }

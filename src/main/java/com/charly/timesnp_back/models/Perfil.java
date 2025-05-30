@@ -53,7 +53,7 @@ public class Perfil {
     @Column(name = "puntos", nullable = true, columnDefinition = "int default 0")
     private int puntos;
 
-    @Column(name = "codigo_compartir", nullable = true, length = 300)
+    @Column(name = "codigoCompartir", nullable = true, length = 300)
     private String codigoCompartir;
 
     @Column(name = "fecha_nacimiento", nullable = true)
