@@ -66,4 +66,20 @@ public class ReporteController {
         }
     }
 
+    /**
+     * Endpoint para obtener todos los reportes.
+     * @return Lista de reportes.
+     */
+    @GetMapping("/todos")
+    public ResponseEntity<ApiResponseTemplate<List<Reporte>>> getAllReportes() {
+        try {
+            List<Reporte> reportes = reporteService.obtenerTodosLosReportes();
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Todos los reportes obtenidos exitosamente", reportes));
+        } catch (Exception e) {
+            log.error("Error al obtener todos los reportes: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseTemplate.error("Error al obtener todos los reportes: " + e.getMessage()));
+        }
+    }
+
 }

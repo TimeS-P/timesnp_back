@@ -7,6 +7,7 @@ import com.charly.timesnp_back.repositories.ReporteRepository;
 import com.charly.timesnp_back.repositories.ServicioGeneralRepository;
 import com.charly.timesnp_back.services.ReporteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReporteServiceImpl implements ReporteService {
 
     private final ReporteRepository reporteRepository;
@@ -55,6 +57,22 @@ public class ReporteServiceImpl implements ReporteService {
     public List<Reporte> obtenerReportesPorServicioGeneral(UUID idServicioGeneral) throws Exception {
 
         List<Reporte> reportes = reporteRepository.findByServicioGeneralId(idServicioGeneral);
+
+        return reportes;
+    }
+
+    /**
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<Reporte> obtenerTodosLosReportes() throws Exception {
+        List<Reporte> reportes = reporteRepository.findAll();
+
+        if (reportes.isEmpty()) {
+            log.warn("No hay reportes disponibles");
+            return List.of();
+        }
 
         return reportes;
     }
