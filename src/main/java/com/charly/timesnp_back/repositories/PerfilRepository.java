@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface PerfilRepository extends JpaRepository<Perfil, UUID> {
 
     Optional<Perfil> findByUsuario_Email(String usuarioEmail);
-
+    Optional<Perfil> findByCodigoCompartir(String codigoCompartir);
 }

@@ -19,7 +19,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -33,8 +32,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @Profile("!prod")
@@ -144,7 +141,8 @@ public class ProjectSecurityConfig {
                         "/api/servicios/serviciosCategoria",
                         "/api/servicios/servicio",
                         "/api/categorias/obtenerCategoriasServicios",
-                        "/api/v1/recommendations/**"
+                        "/api/v1/recommendations/**",
+                        "/api/perfil/existsByCode"
                 ).permitAll()
         );
 

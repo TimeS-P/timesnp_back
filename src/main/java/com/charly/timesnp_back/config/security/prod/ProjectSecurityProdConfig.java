@@ -1,7 +1,6 @@
 package com.charly.timesnp_back.config.security.prod;
 
 import com.charly.timesnp_back.config.security.TimeSnpUserDetailsService;
-import com.charly.timesnp_back.config.security.TimeSnpUsernamePwdAuthenticationProvider;
 import com.charly.timesnp_back.exceptionhandling.CustomAccessDeniedHandler;
 import com.charly.timesnp_back.exceptionhandling.TimeSnpAuthenticationEntryPoint;
 import com.charly.timesnp_back.filter.*;
@@ -17,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -31,8 +29,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @Profile("prod")
