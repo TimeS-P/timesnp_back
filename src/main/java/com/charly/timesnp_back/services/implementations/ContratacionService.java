@@ -20,4 +20,5 @@ public interface ContratacionService {
 
     public void saveContratacion(Perfil perfilCurrent, Contratacion contratacion, String codigo, boolean pointsUsed) throws Exception;
 
+    public Contratacion getContratacionById(UUID idContratacion);
 }

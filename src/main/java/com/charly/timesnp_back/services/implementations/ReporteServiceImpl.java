@@ -1,10 +1,12 @@
 package com.charly.timesnp_back.services.implementations;
 
+import com.charly.timesnp_back.models.Perfil;
 import com.charly.timesnp_back.models.Reporte;
 import com.charly.timesnp_back.models.ServicioGeneral;
 import com.charly.timesnp_back.models.Usuario;
 import com.charly.timesnp_back.repositories.ReporteRepository;
 import com.charly.timesnp_back.repositories.ServicioGeneralRepository;
+import com.charly.timesnp_back.services.PerfilServiceImpl;
 import com.charly.timesnp_back.services.ReporteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,26 +24,23 @@ public class ReporteServiceImpl implements ReporteService {
 
     private final ReporteRepository reporteRepository;
     private final ServicioGeneralRepository servicioGeneralRepository;
+    private final PerfilServiceImpl perfilService;
 
     /**
      * @param idServicioGeneral ID del servicio general al que se le crea el reporte.
      * @param comentario        Comentario del reporte.
      */
     @Override
-    public void crearReporte(UUID idServicioGeneral, String comentario) throws Exception {
-
-        Usuario loggedUser = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public void crearReporte(UUID idPerfil, UUID idServicioGeneral, String comentario) throws Exception {
         ServicioGeneral servicioGeneral = servicioGeneralRepository.findById(idServicioGeneral)
                 .orElseThrow(() -> new IllegalArgumentException("Servicio general no encontrado con ID: " + idServicioGeneral));
 
-        if (loggedUser == null) {
-            throw new IllegalStateException("No user is logged in");
-        }
+        Perfil perfil = perfilService.getPerfilById(idPerfil);
 
         Reporte newReport = new Reporte(
                 comentario,
                 new java.sql.Date(new Date().getTime()),
-                loggedUser.getPerfil(),
+                perfil,
                 servicioGeneral
         );
 

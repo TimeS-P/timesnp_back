@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/contratacion")
 @RequiredArgsConstructor
@@ -60,6 +63,16 @@ public class ContratacionController {
             return ResponseEntity.ok(ApiResponseTemplate.ok("Email enviado correctamente", null));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error al enviar el correo: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/getContrataciones")
+    public ResponseEntity<ApiResponseTemplate<List<Contratacion>>> getContrataciones(@RequestParam UUID perfilId) {
+        try {
+            List<Contratacion> contrataciones = contratacionService.getContrataciones(perfilId);
+            return ResponseEntity.ok(ApiResponseTemplate.ok("Contrataciones obtenidas correctamente", contrataciones));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Error al obtener las contrataciones: " + e.getMessage()));
         }
     }
 

@@ -1,10 +1,13 @@
 package com.charly.timesnp_back.controllers;
 
 import com.charly.timesnp_back.dtos.ReporteDTO;
+import com.charly.timesnp_back.models.Contratacion;
 import com.charly.timesnp_back.models.Reporte;
 import com.charly.timesnp_back.services.ReporteService;
+import com.charly.timesnp_back.services.implementations.ContratacionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,8 @@ public class ReporteController {
 
     private final ReporteService reporteService;
 
+    @Autowired
+    private ContratacionService contratacionService;
 
     /**
      * Endpoint para obtener reportes de un servicio general.
@@ -45,19 +50,16 @@ public class ReporteController {
 
     }
 
-    /**
-     * Endpoint para crear un reporte para un servicio general.
-     * @param idServicioGeneral ID del servicio general al que se le crea el reporte.
-     * @param reporteDTO Comentario del reporte.
-     * @return Mensaje de éxito o error.
-     */
-    @PostMapping("/{idServicioGeneral}")
+
+    @PostMapping("/crearReporte")
     public ResponseEntity<ApiResponseTemplate<String>> crearReporte(
-            @PathVariable("idServicioGeneral") UUID idServicioGeneral,
             @RequestBody ReporteDTO reporteDTO
             ) {
         try {
-            reporteService.crearReporte(idServicioGeneral, reporteDTO.comentario());
+            Contratacion contratacion = contratacionService.getContratacionById(reporteDTO.idContratacion());
+
+
+            reporteService.crearReporte(reporteDTO.idPerfil(), contratacion.getServicioGeneral().getId(), reporteDTO.comentario());
             return ResponseEntity.ok(ApiResponseTemplate.ok("Reporte creado exitosamente", null));
         } catch (Exception e) {
             log.error("Error al crear el reporte: {}", e.getMessage());

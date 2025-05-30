@@ -1,6 +1,10 @@
 package com.charly.timesnp_back.dtos;
 
+import java.util.UUID;
+
 public record ReporteDTO (
-        String comentario
+        String comentario,
+        UUID idContratacion,
+        UUID idPerfil
 ){
 }
