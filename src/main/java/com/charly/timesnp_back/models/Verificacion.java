@@ -3,6 +3,7 @@ package com.charly.timesnp_back.models;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -46,7 +47,7 @@ public class Verificacion {
 
     @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @JsonManagedReference
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
 

@@ -7,6 +7,7 @@ import com.charly.timesnp_back.services.implementations.GcpStorageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,9 @@ public class VerificacionController {
      }
 
      @GetMapping("/generate-url/{filename}")
-     public ResponseEntity<ApiResponseTemplate<URL>> generateUrlForVerification(String filename) {
+     public ResponseEntity<ApiResponseTemplate<URL>> generateUrlForVerification(
+             @PathVariable("filename") String filename
+     ) {
             try {
                 URL url = gcpStorageService.generateSignedUrl(filename);
                 return ResponseEntity.ok(ApiResponseTemplate.ok("URL generada exitosamente", url));
