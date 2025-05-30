@@ -19,7 +19,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -33,8 +32,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @Profile("!prod")
@@ -89,7 +86,8 @@ public class ProjectSecurityConfig {
                                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                                 .ignoringRequestMatchers( // Ignorar estas rutas para la protección CSRF
                                         "/api/auth/register",
-                                        "/api/auth/loginSecure"
+                                        "/api/auth/loginSecure",
+                                        "/api/v1/recommendations/update/**"
                                 )
                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Para que el token CSRF sea accesible desde el cliente
                 )
@@ -157,8 +155,10 @@ public class ProjectSecurityConfig {
                         "/api/chat/get-servicio-general",
                         "/chat/**",
                         "/topic/chat/**",
-                        "/ws-chat/**"
-                        "/api/categorias/obtenerCategoriasServicios"
+                        "/ws-chat/**",
+                        "/api/categorias/obtenerCategoriasServicios",
+                        "/api/v1/recommendations/**",
+                        "/api/perfil/existsByCode"
                 ).permitAll()
         );
 

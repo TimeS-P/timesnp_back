@@ -1,6 +1,5 @@
 package com.charly.timesnp_back.services.implementations;
 
-import com.charly.timesnp_back.controllers.ApiResponseTemplate;
 import com.charly.timesnp_back.dtos.RegisterUserDto;
 import com.charly.timesnp_back.models.Perfil;
 import com.charly.timesnp_back.models.Rol;
@@ -13,8 +12,6 @@ import com.charly.timesnp_back.services.PerfilServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

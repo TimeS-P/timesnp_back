@@ -5,7 +5,6 @@ import com.charly.timesnp_back.models.Perfil;
 import com.charly.timesnp_back.models.Usuario;
 import com.charly.timesnp_back.services.PerfilServiceImpl;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

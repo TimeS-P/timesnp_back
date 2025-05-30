@@ -8,3 +8,4 @@ import java.util.UUID;
 public interface ServicioGeneralRepository extends JpaRepository<ServicioGeneral, UUID> {
 
 }
+

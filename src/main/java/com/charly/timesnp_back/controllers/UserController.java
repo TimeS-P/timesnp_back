@@ -2,13 +2,8 @@ package com.charly.timesnp_back.controllers;
 
 import com.charly.timesnp_back.constants.ApplicationConstants;
 import com.charly.timesnp_back.dtos.LoginRequestDTO;
-import com.charly.timesnp_back.dtos.LoginResponseDTO;
 import com.charly.timesnp_back.dtos.RegisterUserDto;
 import com.charly.timesnp_back.models.Perfil;
-import com.charly.timesnp_back.models.Rol;
-import com.charly.timesnp_back.models.RolNombre;
-import com.charly.timesnp_back.repositories.RolRepository;
-import com.charly.timesnp_back.services.PerfilServiceImpl;
 import com.charly.timesnp_back.services.implementations.UserServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -22,16 +17,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.charly.timesnp_back.repositories.UsuarioRepository;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -151,6 +141,7 @@ public class UserController {
                     .claim("shareCode", perfil != null ? perfil.getCodigoCompartir() : "")
                     // Claim para saber si el usuario esta verificado
                     .claim("isVerified", perfil != null && perfil.getVerificacion() != null)
+                    .claim("puntos", perfil != null ? perfil.getPuntos() : 0)
                     .issuedAt(new Date()) // Fecha de emisión
                     // Expiration time de 8 horas
                     .expiration(new Date(new Date().getTime() + 1000 * 60 * 60 * 8))
@@ -169,5 +160,7 @@ public class UserController {
                 .body(ApiResponseTemplate.ok("Usuario logueado exitosamente", user));
 
     }
+
+
 
 }

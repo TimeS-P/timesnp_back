@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -29,9 +30,9 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"contrataciones"})
 @AllArgsConstructor
-
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ServicioGeneral {
 
     @Id
@@ -65,12 +66,16 @@ public class ServicioGeneral {
     private Combo combo;
 
     @OneToMany(mappedBy = "servicioGeneral")
+    @JsonIgnore
+    @JsonBackReference
     private List<Contratacion> contrataciones;
 
     @OneToMany(mappedBy = "servicioGeneral")
+    @JsonIgnore
     private List<FotoTrabajo> fotos;
 
     @OneToMany(mappedBy = "servicioGeneral")
+    @JsonIgnore
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "servicioGeneral")

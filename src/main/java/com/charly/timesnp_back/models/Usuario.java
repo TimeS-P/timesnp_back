@@ -49,6 +49,7 @@ public class Usuario implements UserDetails {
     private VerificarCorreo verificarCorreo;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
     private List<Domicilio> domicilios;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
