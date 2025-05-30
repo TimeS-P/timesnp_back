@@ -30,7 +30,6 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = {"contrataciones"})
 @AllArgsConstructor
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ServicioGeneral {

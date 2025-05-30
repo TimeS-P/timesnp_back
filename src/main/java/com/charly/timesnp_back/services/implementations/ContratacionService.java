@@ -1,6 +1,7 @@
 package com.charly.timesnp_back.services.implementations;
 
 import com.charly.timesnp_back.models.Contratacion;
+import com.charly.timesnp_back.models.Perfil;
 import com.charly.timesnp_back.models.ServicioGeneral;
 
 import java.util.List;
@@ -17,6 +18,6 @@ public interface ContratacionService {
 
     List<Contratacion> getContrataciones(UUID idPerfil);
 
-
+    public void saveContratacion(Perfil perfilCurrent, Contratacion contratacion, String codigo, boolean pointsUsed) throws Exception;
 
 }

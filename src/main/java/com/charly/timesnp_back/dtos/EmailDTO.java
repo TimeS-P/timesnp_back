@@ -13,9 +13,27 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailDTO {
+
+    // Campos básicos existentes
     private String addressee;
     private String subject;
-    private String message;
     private String title;
     private String name;
+    private String message;
+
+    // Campos adicionales para contratación
+    private String tipoServicio;
+    private String categoria;
+    private String totalPagado;
+    private String fechaContratacion;
+    private String duracion;
+
+    public EmailDTO(String addressee, String subject, String title, String name, String message) {
+        this.addressee = addressee;
+        this.subject = subject;
+        this.title = title;
+        this.name = name;
+        this.message = message;
+    }
+
 }

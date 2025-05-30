@@ -19,7 +19,14 @@ public class PerfilServiceImpl implements IPerfilService {
      */
     @Override
     public Perfil getPerfilById(UUID id) {
-        return null;
+        Perfil perfil = perfilRepository.findById(id).orElse(null);
+
+        if (perfil == null) {
+            // Lanzamos una excepción si no se encuentra el perfil
+            throw new RuntimeException("Perfil no encontrado" + id);
+        }
+
+        return perfil;
     }
 
     /**
@@ -88,5 +95,13 @@ public class PerfilServiceImpl implements IPerfilService {
         }
         return perfil;
     }
+
+    @Override
+    public Perfil existsByCodigoCompartirContratacion(String codigoCompartir) throws Exception {
+        Perfil perfil = perfilRepository.findByCodigoCompartir(codigoCompartir).orElse(null);
+
+        return perfil;
+    }
+
 
 }

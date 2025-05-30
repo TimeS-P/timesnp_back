@@ -48,4 +48,7 @@ public interface IPerfilService {
     public Perfil getPerfilByUserEmail(String email) throws Exception;
 
     public Perfil existsByCodigoCompartir(String codigoCompartir) throws Exception;
+
+
+    public Perfil existsByCodigoCompartirContratacion(String codigoCompartir) throws Exception;
 }
