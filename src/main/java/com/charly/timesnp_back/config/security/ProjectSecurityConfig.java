@@ -109,7 +109,12 @@ public class ProjectSecurityConfig {
                         "/api/validate_token",
                         "/api/resources/upload",
                         "/api/resources/delete",
-                        "/api/updateUserInfo"
+                        "/api/updateUserInfo",
+                        "/api/combo/get-roles",
+                        "/api/chat/create-chat",
+                        "/api/usuario/getId",
+                        "/api/chat/get-mensajes",
+                        "/api/chat/get-chats-usuario"
                 ).authenticated()
                 .requestMatchers( // RUTAS QUE REQUIEREN ROL USUARIO UNICAMENTE
                         "/api/resources/gcp/download/**",
@@ -131,15 +136,26 @@ public class ProjectSecurityConfig {
                 .requestMatchers( // RUTAS PARA ADMINISTRADORES
                         "/api/testing/private/admin"
                 ).hasRole("ADMIN")
+                .requestMatchers( // RUTAS PARA PROVEEDORES
+                        "/api/combo/create-combo",
+                        "/api/combo/get-combos-by-proveedor",
+                        "/api/combo/delete-combo/{id}",
+                        "/api/chat/get-chats-proveedor"
+                ).hasRole("PROVEEDOR")
                 .requestMatchers(
                         "/api/testing/public",
                         "/api/auth/**",
                         "/api/contact",
-                        "/api/send-email", //En teoría tenemos que proteger esta ruta, sin embargo el usuario no está logueado para este punto, por lo que habrá que resolverlo
+                        "/api/send-email",
                         "/error",
                         "/invalidSession",
                         "/api/servicios/serviciosCategoria",
                         "/api/servicios/servicio",
+                        "api/combo/get-combos",
+                        "/api/chat/get-servicio-general",
+                        "/chat/**",
+                        "/topic/chat/**",
+                        "/ws-chat/**",
                         "/api/categorias/obtenerCategoriasServicios",
                         "/api/v1/recommendations/**",
                         "/api/perfil/existsByCode"
@@ -151,7 +167,6 @@ public class ProjectSecurityConfig {
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(timeSnpAuthenticationEntryPoint));
         // GLOGAL CONFIGURATION FOR EXCEPTION HANDLING
         http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));
-
         return http.build();
     }
 

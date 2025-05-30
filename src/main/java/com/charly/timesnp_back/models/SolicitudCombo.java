@@ -32,12 +32,12 @@ public class SolicitudCombo {
     @Column(name = "cantidad", nullable = true, columnDefinition = "boolean default false")
     private Boolean status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_combo", nullable = true)
     private Combo combo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_proveedor", nullable = true)
     private Proveedor proveedor;

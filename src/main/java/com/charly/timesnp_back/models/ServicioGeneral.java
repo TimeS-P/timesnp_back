@@ -58,9 +58,11 @@ public class ServicioGeneral {
     @JoinColumn(name = "id_proveedor_has_servicio", nullable = true)
     private ProveedorHasServicio proveedorHasServicio;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_combo", nullable = true)
+    @JsonBackReference
+    @ToString.Exclude
     private Combo combo;
 
     @OneToMany(mappedBy = "servicioGeneral")
@@ -77,8 +79,8 @@ public class ServicioGeneral {
     private List<Reporte> reportes;
 
     @OneToMany(mappedBy = "servicioGeneral")
-    @JsonIgnore
-    private List<Mensaje> mensajes;
+    @JsonBackReference
+    private List<Chat> chats;
 
     public ServicioGeneral(String nombre, String descripcion, BigDecimal precio, TipoServicio tipoServicio, ProveedorHasServicio proveedorHasServicio, Combo combo) {
         this.nombre = nombre;

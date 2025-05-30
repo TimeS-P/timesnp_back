@@ -3,6 +3,7 @@ package com.charly.timesnp_back.models;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -36,7 +37,7 @@ public class Proveedor {
     @Column(name = "rfc", nullable = true, length = 100)
     private String rfc;
 
-    @OneToOne()
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_perfil", nullable = false)
     private Perfil perfil;
@@ -46,7 +47,7 @@ public class Proveedor {
     private List<ProveedorHasServicio> proveedorHasServicios;
 
     @OneToMany(mappedBy = "proveedor")
-    @JsonIgnore
+    @JsonBackReference
     private List<Combo> combos;
 
     @OneToMany(mappedBy = "proveedor")

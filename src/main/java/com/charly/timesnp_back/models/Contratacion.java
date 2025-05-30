@@ -48,14 +48,14 @@ public class Contratacion {
     @Column(name = "cantidad", nullable = true)
     private int cantidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_perfil", nullable = true)
     @JsonIgnore
     @JsonManagedReference
     private Perfil perfil;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_servicio_general", nullable = true)
     @JsonIgnore

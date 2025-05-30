@@ -34,7 +34,7 @@ public class RecuperarPassword {
     @Column(name = "expires", nullable = true)
     private LocalDateTime expires;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 

@@ -44,7 +44,7 @@ public class Verificacion {
     @Column(name = "fecha_verificacion", nullable = true, length = 300)
     private Date fecha_verificacion;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     @JoinColumn(name = "id_perfil", nullable = false)

@@ -35,7 +35,7 @@ public class VerificarCorreo {
     private Date expires;
 
     @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;

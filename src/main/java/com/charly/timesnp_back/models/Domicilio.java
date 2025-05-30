@@ -2,7 +2,6 @@ package com.charly.timesnp_back.models;
 
 import java.util.UUID;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -53,7 +52,7 @@ public class Domicilio {
     @Column(name = "pais", nullable = true, length = 100)
     private String pais;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
     @JsonBackReference

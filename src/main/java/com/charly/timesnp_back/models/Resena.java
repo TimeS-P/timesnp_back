@@ -39,7 +39,7 @@ public class Resena {
     @Column(name = "comentario", nullable = true)
     private String comentario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_contratacion", nullable = false)
     @JsonIgnore

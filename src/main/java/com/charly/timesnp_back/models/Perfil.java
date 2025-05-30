@@ -65,8 +65,8 @@ public class Perfil {
 
     @Column(name = "descripcion", nullable = true, length = 300)
     private String descripcion;
-    
-    @OneToOne()
+
+    @OneToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
@@ -90,10 +90,6 @@ public class Perfil {
     @OneToMany(mappedBy = "emisor")
     @JsonIgnore
     private List<Mensaje> mensajesReceptor;
-
-    @OneToMany(mappedBy = "remitente")
-    @JsonIgnore
-    private List<Mensaje> mensajesEmisor;
 
     public Perfil(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, String foto, Usuario usuario, int puntos, String codigoCompartir, String genero, String descripcion) {
         this.nombre = nombre;
