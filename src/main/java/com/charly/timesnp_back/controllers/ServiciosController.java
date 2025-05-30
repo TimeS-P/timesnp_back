@@ -2,7 +2,10 @@ package com.charly.timesnp_back.controllers;
 
 import com.charly.timesnp_back.dtos.CrearServicioDTO;
 import com.charly.timesnp_back.models.*;
+import com.charly.timesnp_back.repositories.PerfilRepository;
 import com.charly.timesnp_back.services.*;
+import com.charly.timesnp_back.services.implementations.ComboServiceImp;
+import com.charly.timesnp_back.services.implementations.ai.IndexingService;
 import org.springframework.web.bind.annotation.*;
 
 import com.charly.timesnp_back.dtos.ObtenerServiciosDTO;
@@ -35,6 +38,15 @@ public class ServiciosController {
     @Autowired
     ITipoPrecio tipoPrecioService;
 
+    @Autowired
+    ComboServiceImp comboService;
+
+    @Autowired
+    PerfilRepository perfilRepository;
+
+    @Autowired
+    IndexingService indexingService;
+
     @GetMapping("/serviciosCategoria")
     public ResponseEntity<ApiResponseTemplate<List<ServicioGeneralDTO>>> getMethodName(@RequestParam UUID idCategoria, @RequestParam String filtro) {
         try {
@@ -65,8 +77,18 @@ public class ServiciosController {
         try {
 
             CategoriaServicio categoria = categoriaServicioService.obtenerCategoriaServicioPorId(dto.getIdCategoria());
-            Proveedor proveedor = proveedorService.getProveedorById(dto.getIdProveedor());
+
             TipoPrecio tipoPrecio = tipoPrecioService.getTipoPrecioById(dto.getIdTipoPrecio());
+            String username = comboService.getCurrentUsername();
+            if (username == null) {
+                return ResponseEntity.badRequest().body(ApiResponseTemplate.error("Usuario no autenticado"));
+            }
+            Perfil perfil = perfilRepository.findByUsuario_Email(username)
+                    .orElseThrow(() -> new IllegalStateException("Perfil no encontrado para el usuario: " + username));
+            Proveedor proveedor = perfil.getProveedor();
+            if(proveedor == null){
+                throw new IllegalStateException("Proveedor no encontrado para el perfil: " + perfil.getId());
+            }
 
             ProveedorHasServicio proveedorServicio = new ProveedorHasServicio();
             proveedorServicio.setCategoriaServicio(categoria);
@@ -87,6 +109,9 @@ public class ServiciosController {
             servicioGeneral.setCombo(null);
 
             servicios.crearServicio(servicioGeneral);
+            // Indexar el servicio general
+            indexingService.indexServicio(servicioGeneral);
+
 
             return ResponseEntity.ok(ApiResponseTemplate.ok("Servicio creado correctamente", ServicioGeneralDTO.fromEntity(servicioGeneral)));
         } catch (Exception e) {

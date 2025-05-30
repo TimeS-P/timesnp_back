@@ -182,7 +182,7 @@ public class ComboServiceImp implements ComboService {
     }
 
 
-    private String getCurrentUsername() {
+    public String getCurrentUsername() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             return ((UserDetails) principal).getUsername();
