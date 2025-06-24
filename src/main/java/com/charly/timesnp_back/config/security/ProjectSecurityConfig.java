@@ -175,6 +175,11 @@ public class ProjectSecurityConfig {
                         "/api/resena/crearResena",
                         "/api/reportes/crearReporte"
                 ).permitAll()
+                .requestMatchers(
+                        "/actuator/health",
+                        "/actuator/info",
+                        "/actuator/prometheus"
+                ).permitAll()
         );
 
         //http.formLogin(withDefaults());

@@ -1,0 +1,67 @@
+# service.yaml
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: timesnpback
+  namespace: timesnpsynertech
+spec:
+  template:
+    metadata:
+      annotations:
+        # Mantén al menos una instancia viva para métricas estables
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      containers:
+        # Contenedor principal: tu aplicación Spring Boot
+        - name: app
+          image: us-east1-docker.pkg.dev/timesnpsynertech/timesnp-images/timesnpback:latest
+          env:
+            - name: PERFIL_ACTIVO
+              value: prod
+            - name: CLOUDINARY_API_KEY
+              value: "${CLOUDINARY_API_KEY}"
+            - name: CLOUDINARY_API_SECRET
+              value: "${CLOUDINARY_API_SECRET}"
+            - name: CLOUDINARY_CLOUD_NAME
+              value: "${CLOUDINARY_CLOUD_NAME}"
+            - name: CLOUDINARY_URL
+              value: "${CLOUDINARY_URL}"
+            - name: DATABASE_NAME
+              value: "${DATABASE_NAME}"
+            - name: EMAIL_USERNAME
+              value: "${EMAIL_USERNAME}"
+            - name: EMAIL_PASSWORD
+              value: "${EMAIL_PASSWORD}"
+            - name: GCP_BUCKET_NAME
+              value: "${GCP_BUCKET_NAME}"
+            - name: GCP_PROJECT_ID
+              value: "${GCP_PROJECT_ID}"
+            - name: GCP_SA_JSON_B64
+              value: "${GCP_SA_JSON_B64}"
+            - name: HIBERNATE_FORMAT_SQL
+              value: "${HIBERNATE_FORMAT_SQL}"
+            - name: JPA_HIBERNATE_DDL_AUTO
+              value: "${JPA_HIBERNATE_DDL_AUTO}"
+            - name: JPA_SHOW_SQL
+              value: "${JPA_SHOW_SQL}"
+            - name: JWT_SECRET
+              value: "${JWT_SECRET}"
+            - name: POSTGRESQL_HOST
+              value: "${POSTGRESQL_HOST}"
+            - name: POSTGRESQL_PORT
+              value: "${POSTGRESQL_PORT}"
+            - name: POSTGRESQL_USER
+              value: "${POSTGRESQL_USER}"
+            - name: POSTGRESQL_PASSWORD
+              value: "${POSTGRESQL_PASSWORD}"
+            - name: SECURITY_USER_NAME
+              value: "${SECURITY_USER_NAME}"
+            - name: SECURITY_USER_PASSWORD
+              value: "${SECURITY_USER_PASSWORD}"
+            - name: SPRING_SECURITY_LOG_LEVEL
+              value: "${SPRING_SECURITY_LOG_LEVEL}"
+        # Sidecar de Prometheus para scrappear métricas
+        - name: prometheus-sidecar
+          image: gcr.io/google-containers/prometheus-sidecar:latest
+          args:
+            - "--scrape_uri=http://localhost:8080/actuator/prometheus"

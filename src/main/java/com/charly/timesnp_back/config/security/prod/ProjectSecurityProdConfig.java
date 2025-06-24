@@ -138,6 +138,11 @@ public class ProjectSecurityProdConfig {
                         "/api/servicios/serviciosCategoria",
                         "/api/servicios/servicio"
                 ).permitAll()
+                .requestMatchers(
+                        "/actuator/health",
+                        "/actuator/info",
+                        "/actuator/prometheus"
+                ).permitAll()
         );
 
         //http.formLogin(withDefaults());
